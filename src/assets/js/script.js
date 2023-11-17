@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import gsap from 'gsap';
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl');
@@ -117,6 +118,10 @@ const tick = () => {
   camera.position.y = Math.sin(elapsedTime);
   camera.position.x = Math.cos(elapsedTime);
   camera.lookAt(group.position);
+
+  // GSAP libray: GreenSock
+  // gsap.to(group.position, { duration: 1, delay: 1, x:2 });
+  // gsap.to(group.position, { duration: 1, delay: 3, x:0 });
 
   // render
   renderer.render(scene, camera);
