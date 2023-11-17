@@ -89,23 +89,34 @@ const renderer = new THREE.WebGLRenderer({
 });
 renderer.setSize(sizes.width, sizes.height);
 
-// Time
-let time = Date.now();
+// Time: Adaptation to the framerate
+// let time = Date.now();
 
+// Clock
+const clock = new THREE.Clock();
 
 // Animation
 const tick = () => {
   
-  // Time 
-  const currentTime = Date.now();
-  const deltaTime = currentTime - time;
-  time = currentTime;
+  // Time: Adaptation to the framerate
+  // const currentTime = Date.now();
+  // const deltaTime = currentTime - time;
+  // time = currentTime;
 
-  // console.log(deltaTime);
+  // Clock
+  const elapsedTime = clock.getElapsedTime();
 
   // update objects
-  group.rotation.y += 0.001 * deltaTime;
-  group.rotation.x += 0.001 * deltaTime;
+  // group.rotation.y += 0.001 * deltaTime;
+  // group.rotation.x += 0.001 * deltaTime;
+
+  // group.rotation.y = elapsedTime * Math.PI * 2;
+  // group.position.y = Math.sin(elapsedTime);
+  // group.position.x = Math.cos(elapsedTime);
+
+  camera.position.y = Math.sin(elapsedTime);
+  camera.position.x = Math.cos(elapsedTime);
+  camera.lookAt(group.position);
 
   // render
   renderer.render(scene, camera);
