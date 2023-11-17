@@ -20,7 +20,7 @@ const scene = new THREE.Scene();
 // group
 const group = new THREE.Group();
 group.scale.y = 1.5;
-group.rotation.y = 0.9;
+group.rotation.y = 0;
 scene.add(group);
 
 const cube1 = new THREE.Mesh(
@@ -88,4 +88,30 @@ const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 });
 renderer.setSize(sizes.width, sizes.height);
-renderer.render(scene, camera);
+
+// Time
+let time = Date.now();
+
+
+// Animation
+const tick = () => {
+  
+  // Time 
+  const currentTime = Date.now();
+  const deltaTime = currentTime - time;
+  time = currentTime;
+
+  // console.log(deltaTime);
+
+  // update objects
+  group.rotation.y += 0.001 * deltaTime;
+  group.rotation.x += 0.001 * deltaTime;
+
+  // render
+  renderer.render(scene, camera);
+  
+  // passing the tick function
+  window.requestAnimationFrame(tick);
+};
+
+tick();
