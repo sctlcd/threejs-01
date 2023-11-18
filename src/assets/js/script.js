@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+// import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 /**
  * Cursor
@@ -106,6 +108,12 @@ camera.lookAt(group.position);
 // console.log(mesh.position.distanceTo(camera.position));
 scene.add(camera);
 
+// Orbit controls
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+// controls.target.y = 1;
+// controls.update();
+
 /**
  * Renderer
  */
@@ -150,10 +158,13 @@ const tick = () => {
   // group.rotation.y = elapsedTime;
 
   // Update camera
-  camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 3;
-  camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 3;
-  camera.position.y = cursor.y * 5;
-  camera.lookAt(group.position);
+  // camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 3;
+  // camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 3;
+  // camera.position.y = cursor.y * 5;
+  // camera.lookAt(group.position);
+
+  // Update controls
+  controls.update();
 
   // render
   renderer.render(scene, camera);
