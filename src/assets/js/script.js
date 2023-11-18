@@ -76,7 +76,9 @@ const sizes = {
 /**
  * Camera
  */
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
+const aspectRatio = sizes.width / sizes.height;
+// const camera = new THREE.OrthographicCamera( -1, 1, 1, -1, 0.1, 100 );
 camera.position.x = 2;
 camera.position.y = 2;
 camera.position.z = 2;
@@ -90,7 +92,7 @@ scene.add(camera);
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 });
-renderer.setSize(sizes.width, sizes.height, 0.1, 100);
+renderer.setSize(sizes.width, sizes.height);
 
 // Time: Adaptation to the framerate
 // let time = Date.now();
