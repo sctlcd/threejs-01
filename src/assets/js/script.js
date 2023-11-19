@@ -105,6 +105,14 @@ window.addEventListener('resize', () => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
 
+window.addEventListener('dblclick', () => {
+  if(document.fullscreenElement){
+    document.exitFullscreen();
+  } else {
+    canvas.requestFullscreen();
+  }
+});
+
 /**
  * Camera
  */
