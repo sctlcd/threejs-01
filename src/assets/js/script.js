@@ -41,8 +41,11 @@ group.rotation.y = 0;
 scene.add(group);
 
 const cube1 = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial({ color: 0xff_00_00}),
+  new THREE.BoxGeometry(1, 1, 1, 2, 2, 2),
+  new THREE.MeshBasicMaterial({ 
+    color: 0xff_00_00,
+    wireframe: true
+  }),
 );
 cube1.position.x = - 2;
 group.add(cube1);
