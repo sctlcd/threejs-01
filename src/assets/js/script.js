@@ -85,9 +85,33 @@ group.add(cube3);
  * Sizes
  */
 const sizes = {
-    width: 800,
-    height: 600
+    width: window.innerWidth,
+    height: window.innerHeight
 };
+
+// resize listener
+window.addEventListener('resize', () => {
+   
+  // Update sizes
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
+
+  // Update camra
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
+
+  // Update render
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
+
+window.addEventListener('dblclick', () => {
+  if(document.fullscreenElement){
+    document.exitFullscreen();
+  } else {
+    canvas.requestFullscreen();
+  }
+});
 
 /**
  * Camera
