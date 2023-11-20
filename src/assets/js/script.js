@@ -2,6 +2,12 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 // import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import GUI from 'lil-gui';
+
+/**
+ * Debug UI
+ */
+const gui = new GUI();
 
 /**
  * Cursor
@@ -17,52 +23,29 @@ window.addEventListener('mousemove', (event) => {
 });
 
 
-// Canvas
+/** 
+ * Canvas
+ */
 const canvas = document.querySelector('canvas.webgl');
 
-// Scene
+/** 
+ * Scene
+ */
 const scene = new THREE.Scene();
 
-// Axes Helper
+/** 
+ * Axes Helper
+ */
 // const axesHelper = new THREE.AxesHelper();
 // scene.add(axesHelper);
 
 /**
  * Object - group of cubes
  */
+//  Object - single cube
 // const geometry = new THREE.BoxGeometry(1, 1, 1);
 // const material = new THREE.MeshBasicMaterial({ color: 0xff_00_00 });
 // const mesh = new THREE.Mesh(geometry, material);
-
-// group
-// const group = new THREE.Group();
-// group.scale.y = 1.5;
-// group.rotation.y = 0;
-// scene.add(group);
-
-// const cube1 = new THREE.Mesh(
-//   new THREE.BoxGeometry(1, 1, 1, 2, 2, 2),
-//   new THREE.MeshBasicMaterial({ 
-//     color: 0xff_00_00,
-//     wireframe: true
-//   }),
-// );
-// cube1.position.x = - 2;
-// group.add(cube1);
-
-// const cube2 = new THREE.Mesh(
-//   new THREE.BoxGeometry(1, 1, 1),
-//   new THREE.MeshBasicMaterial({ color: 0x00_ff_00}),
-// );
-// cube2.position.x = 0;
-// group.add(cube2);
-
-// const cube3 = new THREE.Mesh(
-//   new THREE.BoxGeometry(1, 1, 1),
-//   new THREE.MeshBasicMaterial({ color: 0x00_00_ff}),
-// );
-// cube3.position.x = 2;
-// group.add(cube3);
 
 // position
 // mesh.position.x = 0.7;
@@ -82,6 +65,36 @@ const scene = new THREE.Scene();
 // mesh.rotation.y = Math.PI * 0.25;
 
 // scene.add(mesh);
+
+// Object - group of cubes
+const group = new THREE.Group();
+group.scale.y = 1.5;
+group.rotation.y = 0;
+scene.add(group);
+
+const cube1 = new THREE.Mesh(
+  new THREE.BoxGeometry(1, 1, 1, 2, 2, 2),
+  new THREE.MeshBasicMaterial({ 
+    color: 0xff_00_00,
+    wireframe: true
+  }),
+);
+cube1.position.x = - 2;
+group.add(cube1);
+
+const cube2 = new THREE.Mesh(
+  new THREE.BoxGeometry(1, 1, 1),
+  new THREE.MeshBasicMaterial({ color: 0x00_ff_00}),
+);
+cube2.position.x = 0;
+group.add(cube2);
+
+const cube3 = new THREE.Mesh(
+  new THREE.BoxGeometry(1, 1, 1),
+  new THREE.MeshBasicMaterial({ color: 0x00_00_ff}),
+);
+cube3.position.x = 2;
+group.add(cube3);
 
 /**
  * BufferGeometry
@@ -119,28 +132,28 @@ const scene = new THREE.Scene();
 
 // BufferGeometry - multiple triangles
 // Create an empty BufferGeometry
-const geometry = new THREE.BufferGeometry();
+// const geometry = new THREE.BufferGeometry();
 
 // Create 40 triangles (360 values)
-const count = 40;
+// const count = 40;
 // a triangle is composed of 3 vertices and each vertex is composed of 3 values (x, y, z)
-const positionsArray = new Float32Array(count * 3 * 3);
-for(let i = 0; i < positionsArray.length; i++)
-{
-    // -0.5 to center the array of triangles
-    positionsArray[i] = (Math.random() - 0.5) * 4;
-}
+// const positionsArray = new Float32Array(count * 3 * 3);
+// for(let i = 0; i < positionsArray.length; i++)
+// {
+//     // -0.5 to center the array of triangles
+//     positionsArray[i] = (Math.random() - 0.5) * 4;
+// }
 
 // Before you can send that array to the BufferGeometry, you have to transform it into a BufferAttribute.
 // THREE.BufferAttribute(Float32Array, how much values make one vertex attribute) -->  a vertex position is composed of 3 values (x, y and z)
 // Create the attribute, name it 'position' and add this attribute to our BufferGeometry.
-const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
-geometry.setAttribute('position', positionsAttribute);
+// const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
+// geometry.setAttribute('position', positionsAttribute);
 
-const material = new THREE.MeshBasicMaterial({ color: 0xff_00_00, wireframe: true });
+// const material = new THREE.MeshBasicMaterial({ color: 0xff_00_00, wireframe: true });
 
-const mesh = new THREE.Mesh(geometry, material);
-scene.add(mesh);
+// const mesh = new THREE.Mesh(geometry, material);
+// scene.add(mesh);
 
 /**
  * Sizes
@@ -193,7 +206,9 @@ camera.position.z = 4;
 // console.log(mesh.position.distanceTo(camera.position));
 scene.add(camera);
 
-// Orbit controls
+/** 
+ * Orbit controls
+ */
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 // controls.target.y = 1;
@@ -213,7 +228,9 @@ renderer.setSize(sizes.width, sizes.height);
 // Clock
 const clock = new THREE.Clock();
 
-// Animation
+/**
+ * Animation
+ */
 const tick = () => {
   
   // Time: Adaptation to the framerate
