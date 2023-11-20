@@ -28,7 +28,7 @@ const scene = new THREE.Scene();
 // scene.add(axesHelper);
 
 /**
- * Object
+ * Object - group of cubes
  */
 // const geometry = new THREE.BoxGeometry(1, 1, 1);
 // const material = new THREE.MeshBasicMaterial({ color: 0xff_00_00 });
@@ -86,8 +86,9 @@ const scene = new THREE.Scene();
 /**
  * BufferGeometry
  */
+// BufferGeometry - 1 triangle
 // Create an empty BufferGeometry
-const geometry = new THREE.BufferGeometry();
+// const geometry = new THREE.BufferGeometry();
 
 // Float32Array: array that can only store floats inside, the lenght of that array is fixed.
 // Specify the Float32Array length
@@ -110,11 +111,25 @@ const geometry = new THREE.BufferGeometry();
 // positionsArray[8] = 0;
 
 // Create a Float32Array containing the vertices position (3 by 3)
-const positionsArray = new Float32Array([
-  0, 0, 0, // First vertex
-  0, 1, 0, // Second vertex
-  1, 0, 0  // Third vertex
-]);
+// const positionsArray = new Float32Array([
+//   0, 0, 0, // First vertex
+//   0, 1, 0, // Second vertex
+//   1, 0, 0  // Third vertex
+// ]);
+
+// BufferGeometry - multiple triangles
+// Create an empty BufferGeometry
+const geometry = new THREE.BufferGeometry();
+
+// Create 40 triangles (360 values)
+const count = 40;
+// a triangle is composed of 3 vertices and each vertex is composed of 3 values (x, y, z)
+const positionsArray = new Float32Array(count * 3 * 3);
+for(let i = 0; i < positionsArray.length; i++)
+{
+    // -0.5 to center the array of triangles
+    positionsArray[i] = (Math.random() - 0.5) * 4;
+}
 
 // Before you can send that array to the BufferGeometry, you have to transform it into a BufferAttribute.
 // THREE.BufferAttribute(Float32Array, how much values make one vertex attribute) -->  a vertex position is composed of 3 values (x, y and z)
@@ -173,7 +188,7 @@ const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 
 // );
 // camera.position.x = 2;
 // camera.position.y = 2;
-camera.position.z = 3;
+camera.position.z = 4;
 // camera.lookAt(group.position);
 // console.log(mesh.position.distanceTo(camera.position));
 scene.add(camera);
