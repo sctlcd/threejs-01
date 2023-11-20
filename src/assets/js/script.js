@@ -35,35 +35,34 @@ const scene = new THREE.Scene();
 // const mesh = new THREE.Mesh(geometry, material);
 
 // group
-const group = new THREE.Group();
-group.scale.y = 1.5;
-group.rotation.y = 0;
-scene.add(group);
+// const group = new THREE.Group();
+// group.scale.y = 1.5;
+// group.rotation.y = 0;
+// scene.add(group);
 
-const cube1 = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1, 2, 2, 2),
-  new THREE.MeshBasicMaterial({ 
-    color: 0xff_00_00,
-    wireframe: true
-  }),
-);
-cube1.position.x = - 2;
-group.add(cube1);
+// const cube1 = new THREE.Mesh(
+//   new THREE.BoxGeometry(1, 1, 1, 2, 2, 2),
+//   new THREE.MeshBasicMaterial({ 
+//     color: 0xff_00_00,
+//     wireframe: true
+//   }),
+// );
+// cube1.position.x = - 2;
+// group.add(cube1);
 
-const cube2 = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial({ color: 0x00_ff_00}),
-);
-cube2.position.x = 0;
-group.add(cube2);
+// const cube2 = new THREE.Mesh(
+//   new THREE.BoxGeometry(1, 1, 1),
+//   new THREE.MeshBasicMaterial({ color: 0x00_ff_00}),
+// );
+// cube2.position.x = 0;
+// group.add(cube2);
 
-const cube3 = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial({ color: 0x00_00_ff}),
-);
-cube3.position.x = 2;
-group.add(cube3);
-
+// const cube3 = new THREE.Mesh(
+//   new THREE.BoxGeometry(1, 1, 1),
+//   new THREE.MeshBasicMaterial({ color: 0x00_00_ff}),
+// );
+// cube3.position.x = 2;
+// group.add(cube3);
 
 // position
 // mesh.position.x = 0.7;
@@ -83,6 +82,50 @@ group.add(cube3);
 // mesh.rotation.y = Math.PI * 0.25;
 
 // scene.add(mesh);
+
+/**
+ * BufferGeometry
+ */
+// Create an empty BufferGeometry
+const geometry = new THREE.BufferGeometry();
+
+// Float32Array: array that can only store floats inside, the lenght of that array is fixed.
+// Specify the Float32Array length
+// const positionsArray = new Float32Array(9);
+
+// Fill the Float32Array
+// First vertice
+// positionsArray[0] = 0;
+// positionsArray[1] = 0;
+// positionsArray[2] = 0;
+
+// Second vertice
+// positionsArray[3] = 0;
+// positionsArray[4] = 1;
+// positionsArray[5] = 0;
+
+// Third vertice
+// positionsArray[6] = 1;
+// positionsArray[7] = 0;
+// positionsArray[8] = 0;
+
+// Create a Float32Array containing the vertices position (3 by 3)
+const positionsArray = new Float32Array([
+  0, 0, 0, // First vertex
+  0, 1, 0, // Second vertex
+  1, 0, 0  // Third vertex
+]);
+
+// Before you can send that array to the BufferGeometry, you have to transform it into a BufferAttribute.
+// THREE.BufferAttribute(Float32Array, how much values make one vertex attribute) -->  a vertex position is composed of 3 values (x, y and z)
+// Create the attribute, name it 'position' and add this attribute to our BufferGeometry.
+const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
+geometry.setAttribute('position', positionsAttribute);
+
+const material = new THREE.MeshBasicMaterial({ color: 0xff_00_00, wireframe: true });
+
+const mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
 
 /**
  * Sizes
@@ -120,7 +163,7 @@ window.addEventListener('dblclick', () => {
  * Camera
  */
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
-const aspectRatio = sizes.width / sizes.height;
+// const aspectRatio = sizes.width / sizes.height;
 // const camera = new THREE.OrthographicCamera( -1,
 //   1 * aspectRatio,
 //   1 * aspectRatio,
@@ -130,8 +173,8 @@ const aspectRatio = sizes.width / sizes.height;
 // );
 // camera.position.x = 2;
 // camera.position.y = 2;
-camera.position.z = 2;
-camera.lookAt(group.position);
+camera.position.z = 3;
+// camera.lookAt(group.position);
 // console.log(mesh.position.distanceTo(camera.position));
 scene.add(camera);
 
