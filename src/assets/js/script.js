@@ -7,7 +7,28 @@ import GUI from 'lil-gui';
 /**
  * Debug UI
  */
-const gui = new GUI();
+const gui = new GUI({
+  width: 300,
+  title: 'Debug UI',
+  closeFolders: false,
+
+});
+gui.close();
+
+window.addEventListener('keydown', (even) => {
+  if (event.key == 'c'){
+    gui.open(gui._closed);
+  }
+});
+
+gui.hide();
+
+window.addEventListener('keydown', (even) => {
+  if (event.key == 'h'){
+    gui.show(gui._hidden);
+  }
+});
+
 const debugObject = {};
 
 /**
@@ -115,7 +136,7 @@ scene.add(mesh);
  * tweak folders
  */
 const cubeTweak = gui.addFolder('Cube');
-cubeTweak.close();
+// cubeTweak.close();
 
 /**
  * Tweaks
