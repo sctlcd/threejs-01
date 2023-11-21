@@ -8,6 +8,7 @@ import GUI from 'lil-gui';
  * Debug UI
  */
 const gui = new GUI();
+const debugObject = {};
 
 /**
  * Cursor
@@ -43,9 +44,14 @@ const scene = new THREE.Scene();
  * Object - group of cubes
  */
 //  Object - single cube
-// const geometry = new THREE.BoxGeometry(1, 1, 1);
-// const material = new THREE.MeshBasicMaterial({ color: 0xff_00_00 });
-// const mesh = new THREE.Mesh(geometry, material);
+debugObject.color = '#d6cc38';
+
+const geometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2);
+const material = new THREE.MeshBasicMaterial({ 
+  color: debugObject.color
+});
+const mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
 
 // position
 // mesh.position.x = 0.7;
@@ -67,34 +73,64 @@ const scene = new THREE.Scene();
 // scene.add(mesh);
 
 // Object - group of cubes
-const group = new THREE.Group();
-group.scale.y = 1.5;
-group.rotation.y = 0;
-scene.add(group);
+// const group = new THREE.Group();
+// group.scale.y = 1.5;
+// group.rotation.y = 0;
+// scene.add(group);
 
-const cube1 = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1, 2, 2, 2),
-  new THREE.MeshBasicMaterial({ 
-    color: 0xff_00_00,
-    wireframe: true
-  }),
-);
-cube1.position.x = - 2;
-group.add(cube1);
+// const cube1 = new THREE.Mesh(
+//   new THREE.BoxGeometry(1, 1, 1, 2, 2, 2),
+//   new THREE.MeshBasicMaterial({ 
+//     color: 0xff_00_00,
+//     wireframe: true
+//   }),
+// );
+// cube1.position.x = - 2;
+// group.add(cube1);
 
-const cube2 = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial({ color: 0x00_ff_00}),
-);
-cube2.position.x = 0;
-group.add(cube2);
+// const cube2 = new THREE.Mesh(
+//   new THREE.BoxGeometry(1, 1, 1),
+//   new THREE.MeshBasicMaterial({ color: 0x00_ff_00}),
+// );
+// cube2.position.x = 0;
+// group.add(cube2);
 
-const cube3 = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial({ color: 0x00_00_ff}),
-);
-cube3.position.x = 2;
-group.add(cube3);
+// const cube3 = new THREE.Mesh(
+//   new THREE.BoxGeometry(1, 1, 1),
+//   new THREE.MeshBasicMaterial({ color: 0x00_00_ff}),
+// );
+// cube3.position.x = 2;
+// group.add(cube3);
+
+/**
+ * Tweaks
+ */
+
+// range
+gui.add(mesh.position, 'y')
+    .min(- 3)
+    .max(3)
+    .step(0.01)
+    .name('elevation');
+
+// checkbox
+gui.add(mesh, 'visible');
+
+// wireframe
+gui.add(material, 'wireframe');
+
+// color
+gui.addColor(material, 'color')
+.onChange(() => {
+  material.color.set(debugObject.color);
+  // console.log('fwefewfewfew');
+})
+
+// function/button
+debugObject.spin = () => {
+  gsap.to(mesh.rotation, { y: mesh.rotation.y + Math.PI * 2 });
+};
+gui.add(debugObject, 'spin');
 
 /**
  * BufferGeometry
@@ -201,7 +237,7 @@ const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 
 // );
 // camera.position.x = 2;
 // camera.position.y = 2;
-camera.position.z = 4;
+camera.position.z = 2;
 // camera.lookAt(group.position);
 // console.log(mesh.position.distanceTo(camera.position));
 scene.add(camera);
