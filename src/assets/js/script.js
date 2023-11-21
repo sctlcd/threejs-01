@@ -2,6 +2,34 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 // import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import GUI from 'lil-gui';
+
+/**
+ * Debug UI
+ */
+const gui = new GUI({
+  width: 300,
+  title: 'Debug UI',
+  closeFolders: false,
+
+});
+gui.close();
+
+window.addEventListener('keydown', (even) => {
+  if (event.key == 'c'){
+    gui.open(gui._closed);
+  }
+});
+
+gui.hide();
+
+window.addEventListener('keydown', (even) => {
+  if (event.key == 'h'){
+    gui.show(gui._hidden);
+  }
+});
+
+const debugObject = {};
 
 /**
  * Cursor
@@ -17,24 +45,64 @@ window.addEventListener('mousemove', (event) => {
 });
 
 
-// Canvas
+/** 
+ * Canvas
+ */
 const canvas = document.querySelector('canvas.webgl');
 
-// Scene
+/** 
+ * Scene
+ */
 const scene = new THREE.Scene();
 
-// Axes Helper
+/** 
+ * Axes Helper
+ */
 // const axesHelper = new THREE.AxesHelper();
 // scene.add(axesHelper);
 
 /**
  * Object - group of cubes
  */
-// const geometry = new THREE.BoxGeometry(1, 1, 1);
-// const material = new THREE.MeshBasicMaterial({ color: 0xff_00_00 });
-// const mesh = new THREE.Mesh(geometry, material);
+//  Object - single cube
+debugObject.color = '#d6cc38';
+debugObject.subdivision = 2;
 
-// group
+const geometry = new THREE.BoxGeometry(
+  1, // width
+  1, // height
+  1, // depth
+  debugObject.subdivision, // widthSegments
+  debugObject.subdivision, // heightSegments
+  debugObject.subdivision, // depthSegments 
+);
+const material = new THREE.MeshBasicMaterial({ 
+  color: debugObject.color,
+  wireframe: true,
+});
+const mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
+
+// position
+// mesh.position.x = 0.7;
+// mesh.position.y = -0.6;
+// mesh.position.z = 1;
+// mesh.position.set(0.7, -0.6, 1);
+
+// scale
+// mesh.scale.x = 0.7;
+// mesh.scale.y = -0.6;
+// mesh.scale.z = 1;
+// mesh.scale.set(2, 0.5, 0.5);
+
+// rotation
+// mesh.rotation.reorder('YXZ');
+// mesh.rotation.x = Math.PI * 0.25;
+// mesh.rotation.y = Math.PI * 0.25;
+
+// scene.add(mesh);
+
+// Object - group of cubes
 // const group = new THREE.Group();
 // group.scale.y = 1.5;
 // group.rotation.y = 0;
@@ -64,24 +132,54 @@ const scene = new THREE.Scene();
 // cube3.position.x = 2;
 // group.add(cube3);
 
-// position
-// mesh.position.x = 0.7;
-// mesh.position.y = -0.6;
-// mesh.position.z = 1;
-// mesh.position.set(0.7, -0.6, 1);
+/**
+ * tweak folders
+ */
+const cubeTweak = gui.addFolder('Cube');
+// cubeTweak.close();
 
-// scale
-// mesh.scale.x = 0.7;
-// mesh.scale.y = -0.6;
-// mesh.scale.z = 1;
-// mesh.scale.set(2, 0.5, 0.5);
+/**
+ * Tweaks
+ */
 
-// rotation
-// mesh.rotation.reorder('YXZ');
-// mesh.rotation.x = Math.PI * 0.25;
-// mesh.rotation.y = Math.PI * 0.25;
+// range
+cubeTweak.add(mesh.position, 'y')
+    .min(- 3)
+    .max(3)
+    .step(0.01)
+    .name('elevation');
 
-// scene.add(mesh);
+// checkbox
+cubeTweak.add(mesh, 'visible');
+
+// wireframe
+cubeTweak.add(material, 'wireframe');
+
+// color
+cubeTweak.addColor(material, 'color')
+.onChange(() => {
+  material.color.set(debugObject.color);
+});
+
+// function/button
+debugObject.spin = () => {
+  gsap.to(mesh.rotation, { y: mesh.rotation.y + Math.PI * 2 });
+};
+cubeTweak.add(debugObject, 'spin');
+
+// tweaking the geometry
+cubeTweak.add(debugObject, 'subdivision')
+  .min(1)
+  .max(20)
+  .step(1)
+  .onFinishChange(() => {
+    // remove old geometry from the GPU memory
+    mesh.geometry.dispose();
+    mesh.geometry = new THREE.BoxGeometry(
+      1, 1, 1,
+      debugObject.subdivision, debugObject.subdivision, debugObject.subdivision
+    )
+  });
 
 /**
  * BufferGeometry
@@ -119,28 +217,28 @@ const scene = new THREE.Scene();
 
 // BufferGeometry - multiple triangles
 // Create an empty BufferGeometry
-const geometry = new THREE.BufferGeometry();
+// const geometry = new THREE.BufferGeometry();
 
 // Create 40 triangles (360 values)
-const count = 40;
+// const count = 40;
 // a triangle is composed of 3 vertices and each vertex is composed of 3 values (x, y, z)
-const positionsArray = new Float32Array(count * 3 * 3);
-for(let i = 0; i < positionsArray.length; i++)
-{
-    // -0.5 to center the array of triangles
-    positionsArray[i] = (Math.random() - 0.5) * 4;
-}
+// const positionsArray = new Float32Array(count * 3 * 3);
+// for(let i = 0; i < positionsArray.length; i++)
+// {
+//     // -0.5 to center the array of triangles
+//     positionsArray[i] = (Math.random() - 0.5) * 4;
+// }
 
 // Before you can send that array to the BufferGeometry, you have to transform it into a BufferAttribute.
 // THREE.BufferAttribute(Float32Array, how much values make one vertex attribute) -->  a vertex position is composed of 3 values (x, y and z)
 // Create the attribute, name it 'position' and add this attribute to our BufferGeometry.
-const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
-geometry.setAttribute('position', positionsAttribute);
+// const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
+// geometry.setAttribute('position', positionsAttribute);
 
-const material = new THREE.MeshBasicMaterial({ color: 0xff_00_00, wireframe: true });
+// const material = new THREE.MeshBasicMaterial({ color: 0xff_00_00, wireframe: true });
 
-const mesh = new THREE.Mesh(geometry, material);
-scene.add(mesh);
+// const mesh = new THREE.Mesh(geometry, material);
+// scene.add(mesh);
 
 /**
  * Sizes
@@ -188,12 +286,14 @@ const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 
 // );
 // camera.position.x = 2;
 // camera.position.y = 2;
-camera.position.z = 4;
+camera.position.z = 2;
 // camera.lookAt(group.position);
 // console.log(mesh.position.distanceTo(camera.position));
 scene.add(camera);
 
-// Orbit controls
+/** 
+ * Orbit controls
+ */
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 // controls.target.y = 1;
@@ -213,7 +313,9 @@ renderer.setSize(sizes.width, sizes.height);
 // Clock
 const clock = new THREE.Clock();
 
-// Animation
+/**
+ * Animation
+ */
 const tick = () => {
   
   // Time: Adaptation to the framerate
