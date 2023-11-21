@@ -45,10 +45,19 @@ const scene = new THREE.Scene();
  */
 //  Object - single cube
 debugObject.color = '#d6cc38';
+debugObject.subdivision = 2;
 
-const geometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2);
+const geometry = new THREE.BoxGeometry(
+  1, // width
+  1, // height
+  1, // depth
+  debugObject.subdivision, // widthSegments
+  debugObject.subdivision, // heightSegments
+  debugObject.subdivision, // depthSegments 
+);
 const material = new THREE.MeshBasicMaterial({ 
-  color: debugObject.color
+  color: debugObject.color,
+  wireframe: true,
 });
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
@@ -123,14 +132,27 @@ gui.add(material, 'wireframe');
 gui.addColor(material, 'color')
 .onChange(() => {
   material.color.set(debugObject.color);
-  // console.log('fwefewfewfew');
-})
+});
 
 // function/button
 debugObject.spin = () => {
   gsap.to(mesh.rotation, { y: mesh.rotation.y + Math.PI * 2 });
 };
 gui.add(debugObject, 'spin');
+
+// tweaking the geometry
+gui.add(debugObject, 'subdivision')
+  .min(1)
+  .max(20)
+  .step(1)
+  .onFinishChange(() => {
+    // remove old geometry from the GPU memory
+    mesh.geometry.dispose();
+    mesh.geometry = new THREE.BoxGeometry(
+      1, 1, 1,
+      debugObject.subdivision, debugObject.subdivision, debugObject.subdivision
+    )
+  });
 
 /**
  * BufferGeometry
