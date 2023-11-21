@@ -112,24 +112,30 @@ scene.add(mesh);
 // group.add(cube3);
 
 /**
+ * tweak folders
+ */
+const cubeTweak = gui.addFolder('Cube');
+cubeTweak.close();
+
+/**
  * Tweaks
  */
 
 // range
-gui.add(mesh.position, 'y')
+cubeTweak.add(mesh.position, 'y')
     .min(- 3)
     .max(3)
     .step(0.01)
     .name('elevation');
 
 // checkbox
-gui.add(mesh, 'visible');
+cubeTweak.add(mesh, 'visible');
 
 // wireframe
-gui.add(material, 'wireframe');
+cubeTweak.add(material, 'wireframe');
 
 // color
-gui.addColor(material, 'color')
+cubeTweak.addColor(material, 'color')
 .onChange(() => {
   material.color.set(debugObject.color);
 });
@@ -138,10 +144,10 @@ gui.addColor(material, 'color')
 debugObject.spin = () => {
   gsap.to(mesh.rotation, { y: mesh.rotation.y + Math.PI * 2 });
 };
-gui.add(debugObject, 'spin');
+cubeTweak.add(debugObject, 'spin');
 
 // tweaking the geometry
-gui.add(debugObject, 'subdivision')
+cubeTweak.add(debugObject, 'subdivision')
   .min(1)
   .max(20)
   .step(1)
