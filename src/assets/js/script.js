@@ -5,7 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import GUI from 'lil-gui';
 
 /**
- * Debug UI
+ * Debug UI - lil-gui documentation:  https://lil-gui.georgealways.com/
  */
 const gui = new GUI({
   width: 300,
