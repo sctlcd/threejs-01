@@ -29,7 +29,7 @@ window.addEventListener('keydown', (even) => {
   }
 });
 
-const debugObject = {};
+const debugObject1 = {};
 
 /**
  * Cursor
@@ -65,19 +65,19 @@ const scene = new THREE.Scene();
  * Object - group of cubes
  */
 //  Object - single cube
-debugObject.color = '#d6cc38';
-debugObject.subdivision = 2;
+debugObject1.color = '#d6cc38';
+debugObject1.subdivision = 2;
 
 const geometry = new THREE.BoxGeometry(
   1, // width
   1, // height
   1, // depth
-  debugObject.subdivision, // widthSegments
-  debugObject.subdivision, // heightSegments
-  debugObject.subdivision, // depthSegments 
+  debugObject1.subdivision, // widthSegments
+  debugObject1.subdivision, // heightSegments
+  debugObject1.subdivision, // depthSegments 
 );
 const material = new THREE.MeshBasicMaterial({ 
-  color: debugObject.color,
+  color: debugObject1.color,
   wireframe: true,
 });
 const mesh = new THREE.Mesh(geometry, material);
@@ -135,7 +135,9 @@ scene.add(mesh);
 /**
  * tweak folders
  */
-const cubeTweak = gui.addFolder('Cube');
+const cubeTweak1 = gui.addFolder('Cube1');
+const cubeTweak2 = gui.addFolder('Cube2');
+const cubeTweak3 = gui.addFolder('Cube3');
 // cubeTweak.close();
 
 /**
@@ -143,32 +145,32 @@ const cubeTweak = gui.addFolder('Cube');
  */
 
 // range
-cubeTweak.add(mesh.position, 'y')
+cubeTweak1.add(mesh.position, 'y')
     .min(- 3)
     .max(3)
     .step(0.01)
     .name('elevation');
 
 // checkbox
-cubeTweak.add(mesh, 'visible');
+cubeTweak1.add(mesh, 'visible');
 
 // wireframe
-cubeTweak.add(material, 'wireframe');
+cubeTweak1.add(material, 'wireframe');
 
 // color
-cubeTweak.addColor(material, 'color')
+cubeTweak1.addColor(material, 'color')
 .onChange(() => {
-  material.color.set(debugObject.color);
+  material.color.set(debugObject1.color);
 });
 
 // function/button
-debugObject.spin = () => {
+debugObject1.spin = () => {
   gsap.to(mesh.rotation, { y: mesh.rotation.y + Math.PI * 2 });
 };
-cubeTweak.add(debugObject, 'spin');
+cubeTweak1.add(debugObject1, 'spin');
 
 // tweaking the geometry
-cubeTweak.add(debugObject, 'subdivision')
+cubeTweak1.add(debugObject1, 'subdivision')
   .min(1)
   .max(20)
   .step(1)
@@ -177,7 +179,7 @@ cubeTweak.add(debugObject, 'subdivision')
     mesh.geometry.dispose();
     mesh.geometry = new THREE.BoxGeometry(
       1, 1, 1,
-      debugObject.subdivision, debugObject.subdivision, debugObject.subdivision
+      debugObject1.subdivision, debugObject1.subdivision, debugObject1.subdivision
     )
   });
 
