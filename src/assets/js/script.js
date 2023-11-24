@@ -138,7 +138,7 @@ const scene = new THREE.Scene();
 
 // Object - group of cubes
 const group = new THREE.Group();
-group.scale.y = 1.5;
+// group.scale.y = 1.5;
 group.rotation.y = 0;
 scene.add(group);
 
@@ -164,20 +164,24 @@ const meshCube1 = new THREE.Mesh(
   materialCube1,
 );
 
-meshCube1.position.x = - 2;
+meshCube1.position.x = - 3;
 meshCube1.position.y = - 1;
+meshCube1.scale.y = 1.5;
 group.add(meshCube1);
 
 debugObject2.color = '#FF0000';
 debugObject2.subdivision = 4;
 
-const geometryCube2 = new THREE.BoxGeometry(
-  1, // width
-  1, // height
-  1, // depth
-  debugObject2.subdivision, // widthSegments
-  debugObject2.subdivision, // heightSegments
-  debugObject2.subdivision, // depthSegments
+const geometryCube2 = new THREE.SphereGeometry(
+  // 1, // width
+  // 1, // height
+  // 1, // depth
+  // debugObject2.subdivision, // widthSegments
+  // debugObject2.subdivision, // heightSegments
+  // debugObject2.subdivision, // depthSegments
+  1,
+  32,
+  16
 );
 
 const materialCube2 = new THREE.MeshBasicMaterial({
@@ -191,6 +195,7 @@ const meshCube2 = new THREE.Mesh(
 );
 
 meshCube2.position.x = 0;
+meshCube2.position.z = -2;
 group.add(meshCube2);
 
 debugObject3.color = '#0000FF';
@@ -233,10 +238,16 @@ const cubeTweak3 = gui.addFolder('meshCube3');
 
 // range
 cubeTweak1.add(group.children[0].position, 'y')
-    .min(- 3)
-    .max(3)
-    .step(0.01)
-    .name('elevation');
+  .min(- 3)
+  .max(3)
+  .step(0.01)
+  .name('elevation');
+
+cubeTweak1.add(group.children[0].position, 'x')
+  .min(- 3)
+  .max(3)
+  .step(0.01)
+  .name('horizontal position');
 
 cubeTweak2.add(group.children[1].position, 'y')
 .min(- 3)
@@ -310,22 +321,22 @@ cubeTweak1.add(debugObject1, 'subdivision')
     )
   });
 
-cubeTweak2.add(debugObject2, 'subdivision')
-.min(1)
-.max(20)
-.step(1)
-.onFinishChange(() => {
-  // remove old geometry from the GPU memory
-  meshCube2.geometry.dispose();
-  meshCube2.geometry = new THREE.BoxGeometry(
-    1,
-    1,
-    1,
-    debugObject2.subdivision,
-    debugObject2.subdivision,
-    debugObject2.subdivision
-  )
-});
+// cubeTweak2.add(debugObject2, 'subdivision')
+// .min(1)
+// .max(20)
+// .step(1)
+// .onFinishChange(() => {
+//   // remove old geometry from the GPU memory
+//   meshCube2.geometry.dispose();
+//   meshCube2.geometry = new THREE.BoxGeometry(
+//     1,
+//     1,
+//     1,
+//     debugObject2.subdivision,
+//     debugObject2.subdivision,
+//     debugObject2.subdivision
+//   )
+// });
 
 cubeTweak3.add(debugObject3, 'subdivision')
 .min(1)
