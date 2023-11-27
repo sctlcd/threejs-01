@@ -144,11 +144,14 @@ scene.add(group);
 
 debugObject1.color = '#d6cc38';
 debugObject1.subdivision = 6;
+debugObject1.width = 1;
+debugObject1.height = 1;
+debugObject1.depth = 1;
 
 const geometryCube1 = new THREE.BoxGeometry(
-  1, // width
-  1, // height
-  1, // depth
+  debugObject1.width, // width
+  debugObject1.height, // height
+  debugObject1.depth, // depth
   debugObject1.subdivision, // widthSegments
   debugObject1.subdivision, // heightSegments
   debugObject1.subdivision, // depthSegments
@@ -174,12 +177,6 @@ debugObject2.subdivision = 32;
 debugObject2.radius = 1;
 
 const geometryCube2 = new THREE.SphereGeometry(
-  // 1, // width
-  // 1, // height
-  // 1, // depth
-  // debugObject2.subdivision, // widthSegments
-  // debugObject2.subdivision, // heightSegments
-  // debugObject2.subdivision, // depthSegments
   debugObject2.radius,
   debugObject2.subdivision,
   debugObject2.subdivision / 2
@@ -315,6 +312,60 @@ geometryTweak3.add(debugObject3, 'spin');
 
 // tweaking the geometry
 geometryTweak1
+.add(debugObject1, 'width')
+.min(0.5)
+.max(4)
+.step(1)
+.onFinishChange(() => {
+  // remove old geometry from the GPU memory
+  meshCube1.geometry.dispose();
+  meshCube1.geometry = new THREE.BoxGeometry(
+    debugObject1.width,
+    debugObject1.height,
+    debugObject1.depth,
+    debugObject1.subdivision,
+    debugObject1.subdivision,
+    debugObject1.subdivision
+  );
+});
+
+geometryTweak1
+.add(debugObject1, 'height')
+.min(0.5)
+.max(4)
+.step(1)
+.onFinishChange(() => {
+  // remove old geometry from the GPU memory
+  meshCube1.geometry.dispose();
+  meshCube1.geometry = new THREE.BoxGeometry(
+    debugObject1.width,
+    debugObject1.height,
+    debugObject1.depth,
+    debugObject1.subdivision,
+    debugObject1.subdivision,
+    debugObject1.subdivision
+  );
+});
+
+geometryTweak1
+.add(debugObject1, 'depth')
+.min(0.5)
+.max(4)
+.step(1)
+.onFinishChange(() => {
+  // remove old geometry from the GPU memory
+  meshCube1.geometry.dispose();
+  meshCube1.geometry = new THREE.BoxGeometry(
+    debugObject1.width,
+    debugObject1.height,
+    debugObject1.depth,
+    debugObject1.subdivision,
+    debugObject1.subdivision,
+    debugObject1.subdivision
+  );
+});
+
+geometryTweak1
   .add(debugObject1, 'subdivision')
   .min(1)
   .max(20)
@@ -323,9 +374,9 @@ geometryTweak1
     // remove old geometry from the GPU memory
     meshCube1.geometry.dispose();
     meshCube1.geometry = new THREE.BoxGeometry(
-      1,
-      1,
-      1,
+      debugObject1.width,
+    debugObject1.height,
+    debugObject1.depth,
       debugObject1.subdivision,
       debugObject1.subdivision,
       debugObject1.subdivision
