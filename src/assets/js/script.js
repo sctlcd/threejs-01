@@ -170,7 +170,8 @@ meshCube1.scale.y = 1.5;
 group.add(meshCube1);
 
 debugObject2.color = '#FF0000';
-debugObject2.subdivision = 4;
+debugObject2.subdivision = 32;
+debugObject2.radius = 1;
 
 const geometryCube2 = new THREE.SphereGeometry(
   // 1, // width
@@ -179,9 +180,9 @@ const geometryCube2 = new THREE.SphereGeometry(
   // debugObject2.subdivision, // widthSegments
   // debugObject2.subdivision, // heightSegments
   // debugObject2.subdivision, // depthSegments
-  1,
-  32,
-  16
+  debugObject2.radius,
+  debugObject2.subdivision,
+  debugObject2.subdivision / 2
 );
 
 const materialCube2 = new THREE.MeshBasicMaterial({
@@ -220,16 +221,16 @@ const meshCube3 = new THREE.Mesh(
   materialCube3
 );
 
-meshCube3.position.x = 2;
+meshCube3.position.x = 3;
 meshCube3.position.y = 1;
 group.add(meshCube3);
 
 /**
  * tweak folders
  */
-const cubeTweak1 = gui.addFolder('meshCube1');
-const cubeTweak2 = gui.addFolder('meshCube2');
-const cubeTweak3 = gui.addFolder('meshCube3');
+const geometryTweak1 = gui.addFolder('meshCube1');
+const geometryTweak2 = gui.addFolder('meshCube2');
+const geometryTweak3 = gui.addFolder('meshCube3');
 // cubeTweak.close();
 
 /**
@@ -237,74 +238,84 @@ const cubeTweak3 = gui.addFolder('meshCube3');
  */
 
 // range
-cubeTweak1.add(group.children[0].position, 'y')
+geometryTweak1.add(group.children[0].position, 'y')
   .min(- 3)
   .max(3)
   .step(0.01)
   .name('elevation');
 
-cubeTweak1.add(group.children[0].position, 'x')
-  .min(- 3)
-  .max(3)
+geometryTweak1.add(group.children[0].position, 'x')
+  .min(- 4)
+  .max(4)
   .step(0.01)
   .name('horizontal position');
 
-cubeTweak2.add(group.children[1].position, 'y')
-.min(- 3)
-.max(3)
+geometryTweak2.add(group.children[1].position, 'y')
+.min(- 4)
+.max(4)
 .step(0.01)
 .name('elevation');
 
-cubeTweak3.add(group.children[2].position, 'y')
+geometryTweak2.add(group.children[1].position, 'x')
+  .min(- 6)
+  .max()
+  .step(0.01)
+  .name('horizontal position');
+
+geometryTweak3.add(group.children[2].position, 'y')
 .min(- 3)
 .max(3)
 .step(0.01)
 .name('elevation');
 
 // checkbox
-cubeTweak1.add(group.children[0], 'visible');
-cubeTweak2.add(group.children[1], 'visible');
-cubeTweak3.add(group.children[2], 'visible');
+geometryTweak1.add(group.children[0], 'visible');
+geometryTweak2.add(group.children[1], 'visible');
+geometryTweak3.add(group.children[2], 'visible');
 
 // wireframe
-cubeTweak1.add(materialCube1, 'wireframe');
-cubeTweak2.add(materialCube2, 'wireframe');
-cubeTweak3.add(materialCube3, 'wireframe');
+geometryTweak1.add(materialCube1, 'wireframe');
+geometryTweak2.add(materialCube2, 'wireframe');
+geometryTweak3.add(materialCube3, 'wireframe');
 
 // color
-cubeTweak1.addColor(materialCube1, 'color')
-.onChange(() => {
-  material.color.set(debugObject1.color);
-});
+geometryTweak1
+  .addColor(materialCube1, 'color')
+  .onChange(() => {
+    material.color.set(debugObject1.color);
+  });
 
-cubeTweak2.addColor(materialCube2, 'color')
-.onChange(() => {
-  material.color.set(debugObject2.color);
-});
+geometryTweak2
+  .addColor(materialCube2, 'color')
+  .onChange(() => {
+    material.color.set(debugObject2.color);
+  });
 
-cubeTweak3.addColor(materialCube3, 'color')
-.onChange(() => {
-  material.color.set(debugObject3.color);
-});
+geometryTweak3
+  .addColor(materialCube3, 'color')
+  .onChange(() => {
+    material.color.set(debugObject3.color);
+  });
 
 // function/button
 debugObject1.spin = () => {
   gsap.to(meshCube1.rotation, { y: meshCube1.rotation.y + Math.PI * 2 });
 };
-cubeTweak1.add(debugObject1, 'spin');
+geometryTweak1.add(debugObject1, 'spin');
 
 debugObject2.spin = () => {
   gsap.to(meshCube2.rotation, { y: meshCube2.rotation.y + Math.PI * 2 });
 };
-cubeTweak2.add(debugObject2, 'spin');
+geometryTweak2.add(debugObject2, 'spin');
 
 debugObject3.spin = () => {
   gsap.to(meshCube3.rotation, { y: meshCube3.rotation.y + Math.PI * 2 });
 };
-cubeTweak3.add(debugObject3, 'spin');
+geometryTweak3.add(debugObject3, 'spin');
 
 // tweaking the geometry
-cubeTweak1.add(debugObject1, 'subdivision')
+geometryTweak1
+  .add(debugObject1, 'subdivision')
   .min(1)
   .max(20)
   .step(1)
@@ -318,42 +329,56 @@ cubeTweak1.add(debugObject1, 'subdivision')
       debugObject1.subdivision,
       debugObject1.subdivision,
       debugObject1.subdivision
-    )
+    );
   });
 
-// cubeTweak2.add(debugObject2, 'subdivision')
-// .min(1)
-// .max(20)
-// .step(1)
-// .onFinishChange(() => {
-//   // remove old geometry from the GPU memory
-//   meshCube2.geometry.dispose();
-//   meshCube2.geometry = new THREE.BoxGeometry(
-//     1,
-//     1,
-//     1,
-//     debugObject2.subdivision,
-//     debugObject2.subdivision,
-//     debugObject2.subdivision
-//   )
-// });
+  geometryTweak2
+  .add(debugObject2, 'radius')
+  .min(0.5)
+  .max(4)
+  .step(1)
+  .onFinishChange(() => {
+    // remove old geometry from the GPU memory
+    meshCube2.geometry.dispose();
+    meshCube2.geometry = new THREE.SphereGeometry(
+      debugObject2.radius,
+      debugObject2.subdivision,
+      debugObject2.subdivision / 2
+    );
+  });
 
-cubeTweak3.add(debugObject3, 'subdivision')
-.min(1)
-.max(20)
-.step(1)
-.onFinishChange(() => {
-  // remove old geometry from the GPU memory
-  meshCube3.geometry.dispose();
-  meshCube3.geometry = new THREE.BoxGeometry(
-    1,
-    1,
-    1,
-    debugObject3.subdivision,
-    debugObject3.subdivision,
-    debugObject3.subdivision
-  )
-});
+geometryTweak2
+  .add(debugObject2, 'subdivision')
+  .min(4)
+  .max(64)
+  .step(1)
+  .onFinishChange(() => {
+    // remove old geometry from the GPU memory
+    meshCube2.geometry.dispose();
+    meshCube2.geometry = new THREE.SphereGeometry(
+      1,
+      debugObject2.subdivision,
+      debugObject2.subdivision / 2
+    );
+  });
+
+// geometryTweak3
+//   .add(debugObject3, 'subdivision')
+//   .min(1)
+//   .max(20)
+//   .step(1)
+//   .onFinishChange(() => {
+//     // remove old geometry from the GPU memory
+//     meshCube3.geometry.dispose();
+//     meshCube3.geometry = new THREE.BoxGeometry(
+//       1,
+//       1,
+//       1,
+//       debugObject3.subdivision,
+//       debugObject3.subdivision,
+//       debugObject3.subdivision
+//     )
+//   });
 
 /**
  * BufferGeometry
