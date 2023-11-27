@@ -13,10 +13,10 @@ const gui = new GUI({
   closeFolders: false,
 
 });
-// gui.close();
+gui.close();
 
 window.addEventListener('keydown', (even) => {
-  if (event.key == 'c'){
+  if (event.key == 'd'){
     gui.open(gui._closed);
   }
 });
@@ -177,19 +177,19 @@ debugObject2.subdivision = 32;
 debugObject2.radius = 1;
 
 const geometryCube2 = new THREE.SphereGeometry(
-  debugObject2.radius,
-  debugObject2.subdivision,
-  debugObject2.subdivision / 2
+  debugObject2.radius, // radius
+  debugObject2.subdivision, // widthSegments
+  debugObject2.subdivision / 2, // heightSegments 
 );
 
 const materialCube2 = new THREE.MeshBasicMaterial({
   color: debugObject2.color,
-  wireframe: true
+  wireframe: true,
 });
 
 const meshCube2 = new THREE.Mesh(
   geometryCube2,
-  materialCube2
+  materialCube2,
 );
 
 meshCube2.position.x = 0;
@@ -197,15 +197,16 @@ meshCube2.position.z = -2;
 group.add(meshCube2);
 
 debugObject3.color = '#0000FF';
-debugObject3.subdivision = 2;
+debugObject3.radiusTop = 1;
+debugObject3.radiusBottom = 1;
+debugObject3.height = 2;
+debugObject3.radialSegments = 32;
 
-const geometryCube3 = new THREE.BoxGeometry(
-  1, // width
-  1, // height
-  1, // depth
-  debugObject3.subdivision, // widthSegments
-  debugObject3.subdivision, // heightSegments
-  debugObject3.subdivision, // depthSegments
+const geometryCube3 = new THREE.CylinderGeometry(
+  debugObject3.radiusTop, // radiusTop
+  debugObject3.radiusBottom, // radiusBottom
+  debugObject3.height, // height
+  debugObject3.radialSegments, // radialSegments
 );
 
 const materialCube3 = new THREE.MeshBasicMaterial({
@@ -218,17 +219,20 @@ const meshCube3 = new THREE.Mesh(
   materialCube3
 );
 
-meshCube3.position.x = 3;
-meshCube3.position.y = 1;
+meshCube3.position.x = 4;
+meshCube3.position.y = 2;
+meshCube3.position.z = -2;
 group.add(meshCube3);
 
 /**
  * tweak folders
  */
-const geometryTweak1 = gui.addFolder('meshCube1');
-const geometryTweak2 = gui.addFolder('meshCube2');
-const geometryTweak3 = gui.addFolder('meshCube3');
-// cubeTweak.close();
+const geometryTweak1 = gui.addFolder('mesh cube 1');
+const geometryTweak2 = gui.addFolder('mesh cube 2');
+const geometryTweak3 = gui.addFolder('mesh cube 3');
+geometryTweak1.close();
+geometryTweak2.close();
+geometryTweak3.close();
 
 /**
  * Tweaks
@@ -413,23 +417,69 @@ geometryTweak2
     );
   });
 
-// geometryTweak3
-//   .add(debugObject3, 'subdivision')
-//   .min(1)
-//   .max(20)
-//   .step(1)
-//   .onFinishChange(() => {
-//     // remove old geometry from the GPU memory
-//     meshCube3.geometry.dispose();
-//     meshCube3.geometry = new THREE.BoxGeometry(
-//       1,
-//       1,
-//       1,
-//       debugObject3.subdivision,
-//       debugObject3.subdivision,
-//       debugObject3.subdivision
-//     )
-//   });
+geometryTweak3
+  .add(debugObject3, 'radiusTop')
+  .min(0.5)
+  .max(4)
+  .step(1)
+  .onFinishChange(() => {
+    // remove old geometry from the GPU memory
+    meshCube3.geometry.dispose();
+    meshCube3.geometry = new THREE.CylinderGeometry(
+      debugObject3.radiusTop,
+      debugObject3.radiusBottom,
+      debugObject3.height,
+      debugObject3.radialSegments,
+    );
+  });
+
+geometryTweak3
+  .add(debugObject3, 'radiusBottom')
+  .min(0.5)
+  .max(4)
+  .step(1)
+  .onFinishChange(() => {
+    // remove old geometry from the GPU memory
+    meshCube3.geometry.dispose();
+    meshCube3.geometry = new THREE.CylinderGeometry(
+      debugObject3.radiusTop,
+      debugObject3.radiusBottom,
+      debugObject3.height,
+      debugObject3.radialSegments,
+    );
+  });
+
+geometryTweak3
+  .add(debugObject3, 'height')
+  .min(0.5)
+  .max(4)
+  .step(1)
+  .onFinishChange(() => {
+    // remove old geometry from the GPU memory
+    meshCube3.geometry.dispose();
+    meshCube3.geometry = new THREE.CylinderGeometry(
+      debugObject3.radiusTop,
+      debugObject3.radiusBottom,
+      debugObject3.height,
+      debugObject3.radialSegments,
+    );
+  });
+
+geometryTweak3
+  .add(debugObject3, 'radialSegments')
+  .min(8)
+  .max(80)
+  .step(1)
+  .onFinishChange(() => {
+    // remove old geometry from the GPU memory
+    meshCube3.geometry.dispose();
+    meshCube3.geometry = new THREE.CylinderGeometry(
+      debugObject3.radiusTop,
+      debugObject3.radiusBottom,
+      debugObject3.height,
+      debugObject3.radialSegments,
+    );
+  });
 
 /**
  * BufferGeometry
