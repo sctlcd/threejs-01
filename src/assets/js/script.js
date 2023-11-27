@@ -10,13 +10,15 @@ import GUI from 'lil-gui';
 const gui = new GUI({
   width: 300,
   title: 'Debug UI',
-  closeFolders: false,
-
+  closeFolders: true,
+  close: false,
+  hide: false,
 });
-gui.close();
+
+// gui.close();
 
 window.addEventListener('keydown', (even) => {
-  if (event.key == 'd'){
+  if (event.key == 'f'){
     gui.open(gui._closed);
   }
 });
@@ -227,12 +229,61 @@ group.add(meshCube3);
 /**
  * tweak folders
  */
-const geometryTweak1 = gui.addFolder('mesh cube 1');
-const geometryTweak2 = gui.addFolder('mesh cube 2');
-const geometryTweak3 = gui.addFolder('mesh cube 3');
-geometryTweak1.close();
-geometryTweak2.close();
-geometryTweak3.close();
+const geometryTweak1 = gui.addFolder('mesh geometry 1 - Box');
+const geometryTweak2 = gui.addFolder('mesh geometry 2 - Sphere');
+const geometryTweak3 = gui.addFolder('mesh geometry 3 - Cylinder');
+
+window.addEventListener('keydown', (even) => {
+  if (event.key == '1'){
+    if (gui._closeFolders) {
+      geometryTweak1.open();
+      gui._closeFolders = false;
+    }else {
+      geometryTweak1.close();
+      gui._closeFolders = true;
+    }
+  }
+});
+
+window.addEventListener('keydown', (even) => {
+  if (event.key == '2'){
+    if (gui._closeFolders) {
+      geometryTweak2.open();
+      gui._closeFolders = false;
+    }else {
+      geometryTweak2.close();
+      gui._closeFolders = true;
+    }
+  }
+});
+
+window.addEventListener('keydown', (even) => {
+  if (event.key == '3'){
+    if (gui._closeFolders) {
+      geometryTweak3.open();
+      gui._closeFolders = false;
+    }else {
+      geometryTweak3.close();
+      gui._closeFolders = true;
+    }
+  }
+});
+
+window.addEventListener('keydown', (even) => {
+  if (event.key == 'a'){
+    if (gui._closeFolders) {
+      geometryTweak1.open();
+      geometryTweak2.open();
+      geometryTweak3.open();
+      gui._closeFolders = false;
+    }else {
+      geometryTweak1.close();
+      geometryTweak2.close();
+      geometryTweak3.close();
+      gui._closeFolders = true;
+    }
+  }
+});
 
 /**
  * Tweaks
