@@ -36,6 +36,22 @@ const debugObject1 = {};
 const debugObject2 = {};
 const debugObject3 = {};
 
+/** 
+ * Canvas
+ */
+const canvas = document.querySelector('canvas.webgl');
+
+/** 
+ * Scene
+ */
+const scene = new THREE.Scene();
+
+/** 
+ * Axes Helper
+ */
+// const axesHelper = new THREE.AxesHelper();
+// scene.add(axesHelper);
+
 /**
  * Sizes
  */
@@ -44,6 +60,28 @@ const sizes = {
   height: window.innerHeight
 };
 
+/**
+ * Camera
+ */
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
+// const aspectRatio = sizes.width / sizes.height;
+// const camera = new THREE.OrthographicCamera( -1,
+//   1 * aspectRatio,
+//   1 * aspectRatio,
+//   -1,
+//   0.1,
+//   100
+// );
+// camera.position.x = 2;
+// camera.position.y = 2;
+camera.position.z = 4;
+// camera.lookAt(group.position);
+// console.log(mesh.position.distanceTo(camera.position));
+scene.add(camera);
+
+/**
+ * Sizes
+ */
 // resize listener
 window.addEventListener('resize', () => {
    
@@ -68,6 +106,14 @@ window.addEventListener('dblclick', () => {
   }
 });
 
+/** 
+ * Orbit controls
+ */
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+// controls.target.y = 1;
+// controls.update();
+
 /**
  * Cursor
  */
@@ -81,22 +127,97 @@ window.addEventListener('mousemove', (event) => {
   // console.log(cursor.x, cursor.y);
 });
 
-
-/** 
- * Canvas
+/**
+ * Textures
  */
-const canvas = document.querySelector('canvas.webgl');
+// using onload event
+// const image = new Image();
+// image.onload = () => {
+//   const texture = new THREE.Texture(image);
+//   console.log('image loaded');
+// };
+// image.src = '/textures/door/color.jpg';
 
-/** 
- * Scene
- */
-const scene = new THREE.Scene();
+// using eventTarget: addEventListener() method
+// const image1 = new Image();
+// const colorTexture1 = new THREE.Texture(image1);
+// colorTexture1.colorSpace = THREE.SRGBColorSpace;
 
-/** 
- * Axes Helper
- */
-// const axesHelper = new THREE.AxesHelper();
-// scene.add(axesHelper);
+// image1.addEventListener('load', () => {
+//  colorTexture1.needsUpdate = true;
+// });
+
+// image1.src = '/textures/door/color-min.jpg';
+
+// const image2 = new Image();
+// const colorTexture2 = new THREE.Texture(image2);
+// colorTexture2.colorSpace = THREE.SRGBColorSpace;
+
+// image2.addEventListener('load', () => {
+//  colorTexture2.needsUpdate = true;
+// });
+
+// image2.src = '/textures/space-blanket-folds/space-bbanket-folds-min.jpg';
+
+// const image3 = new Image();
+// const colorTexture3 = new THREE.Texture(image3);
+// colorTexture3.colorSpace = THREE.SRGBColorSpace;
+
+// image3.addEventListener('load', () => {
+//  colorTexture3.needsUpdate = true;
+// });
+
+// image3.src = '/textures/rock/rock-cliff-volcanic-min.jpg';
+
+// using texture loader and loadingManager
+const loadingManager = new THREE.LoadingManager();
+loadingManager.onStart = () => { 
+  console.log('onStart');
+};
+loadingManager.onLoaded = () => { 
+  console.log('onLoaded');
+};
+loadingManager.onProgress = () => { 
+  console.log('onProgress');
+};
+loadingManager.onError = () => { 
+  console.log('onError');
+};
+const textureLoader = new THREE.TextureLoader(loadingManager);
+
+const pathImage1 = '/textures/minecraft.png'; // '/textures/door/color-min.jpg';
+const colorTexture1 = textureLoader.load(pathImage1);
+colorTexture1.colorSpace = THREE.SRGBColorSpace;
+
+// Transforming the texture
+// colorTexture1.repeat.x = 2;
+// colorTexture1.repeat.y = 3;
+// colorTexture1.wrapS = THREE.RepeatWrapping;
+// colorTexture1.wrapT = THREE.RepeatWrapping;
+// colorTexture1.wrapS = THREE.MirroredRepeatWrapping;
+// colorTexture1.wrapT = THREE.MirroredRepeatWrapping;
+
+// colorTexture1.offset.x = 0.5;
+// colorTexture1.offset.y = 0.5;
+
+// colorTexture1.rotation = Math.PI * 0.25;
+// colorTexture1.center.x = 0.5;
+// colorTexture1.center.y = 0.5;
+
+// Minification filter
+// colorTexture1.generateMipmaps = false; // deactivate the mipmaps generation when used with NearestFilter on minFilter 
+// colorTexture1.minFilter = THREE.NearestFilter;
+
+// Magnification Filter
+colorTexture1.magFilter = THREE.NearestFilter;
+
+const pathImage2 = '/textures/space-blanket-folds/space-bbanket-folds-min.jpg';
+const colorTexture2 = textureLoader.load(pathImage2);
+colorTexture2.colorSpace = THREE.SRGBColorSpace;
+
+const pathImage3 = '/textures/rock/rock-cliff-volcanic-min.jpg';
+const colorTexture3 = textureLoader.load(pathImage3);
+colorTexture3.colorSpace = THREE.SRGBColorSpace;
 
 /**
  * Objects
@@ -151,7 +272,7 @@ debugObject1.width = 1;
 debugObject1.height = 1;
 debugObject1.depth = 1;
 
-const geometryCube1 = new THREE.BoxGeometry(
+const geometry1 = new THREE.BoxGeometry(
   debugObject1.width, // width
   debugObject1.height, // height
   debugObject1.depth, // depth
@@ -160,44 +281,46 @@ const geometryCube1 = new THREE.BoxGeometry(
   debugObject1.subdivision, // depthSegments
 );
 
-const materialCube1 = new THREE.MeshBasicMaterial({ 
-  color: debugObject1.color,
-  wireframe: true
+const materialGeometry1 = new THREE.MeshBasicMaterial({ 
+  // color: debugObject1.color,
+  // wireframe: true
+  map: colorTexture1,
 });
 
-const meshCube1 = new THREE.Mesh(
-  geometryCube1,
-  materialCube1,
+const meshGeometry1 = new THREE.Mesh(
+  geometry1,
+  materialGeometry1,
 );
 
-meshCube1.position.x = - 3;
-meshCube1.position.y = - 1;
-meshCube1.scale.y = 1.5;
-group.add(meshCube1);
+meshGeometry1.position.x = - 3;
+meshGeometry1.position.y = - 1;
+meshGeometry1.scale.y = 1.5;
+group.add(meshGeometry1);
 
 debugObject2.color = '#FF0000';
 debugObject2.subdivision = 32;
 debugObject2.radius = 1;
 
-const geometryCube2 = new THREE.SphereGeometry(
+const geometry2 = new THREE.SphereGeometry(
   debugObject2.radius, // radius
   debugObject2.subdivision, // widthSegments
   debugObject2.subdivision / 2, // heightSegments 
 );
 
-const materialCube2 = new THREE.MeshBasicMaterial({
-  color: debugObject2.color,
-  wireframe: true,
+const materialGeometry2 = new THREE.MeshBasicMaterial({
+  // color: debugObject2.color,
+  // wireframe: true,
+  map: colorTexture2,
 });
 
-const meshCube2 = new THREE.Mesh(
-  geometryCube2,
-  materialCube2,
+const meshGeometry2 = new THREE.Mesh(
+  geometry2,
+  materialGeometry2,
 );
 
-meshCube2.position.x = 0;
-meshCube2.position.z = -2;
-group.add(meshCube2);
+meshGeometry2.position.x = 0;
+meshGeometry2.position.z = -2;
+group.add(meshGeometry2);
 
 debugObject3.color = '#0000FF';
 debugObject3.radiusTop = 1;
@@ -205,27 +328,28 @@ debugObject3.radiusBottom = 1;
 debugObject3.height = 2;
 debugObject3.radialSegments = 32;
 
-const geometryCube3 = new THREE.CylinderGeometry(
+const geometry3 = new THREE.CylinderGeometry(
   debugObject3.radiusTop, // radiusTop
   debugObject3.radiusBottom, // radiusBottom
   debugObject3.height, // height
   debugObject3.radialSegments, // radialSegments
 );
 
-const materialCube3 = new THREE.MeshBasicMaterial({
-  color: debugObject3.color,
-  wireframe: true
+const materialGeometry3 = new THREE.MeshBasicMaterial({
+  // color: debugObject3.color,
+  // wireframe: true
+  map: colorTexture3,
 });
 
-const meshCube3 = new THREE.Mesh(
-  geometryCube3,
-  materialCube3
+const meshGeometry3 = new THREE.Mesh(
+  geometry3,
+  materialGeometry3
 );
 
-meshCube3.position.x = 4;
-meshCube3.position.y = 2;
-meshCube3.position.z = -2;
-group.add(meshCube3);
+meshGeometry3.position.x = 4;
+meshGeometry3.position.y = 2;
+meshGeometry3.position.z = -2;
+group.add(meshGeometry3);
 
 /**
  * tweak folders
@@ -348,9 +472,9 @@ geometryTweak3.add(group.children[2], 'visible');
 
 // wireframe
 // cubeTweak.add(material, 'wireframe');
-geometryTweak1.add(materialCube1, 'wireframe');
-geometryTweak2.add(materialCube2, 'wireframe');
-geometryTweak3.add(materialCube3, 'wireframe');
+geometryTweak1.add(materialGeometry1, 'wireframe');
+geometryTweak2.add(materialGeometry2, 'wireframe');
+geometryTweak3.add(materialGeometry3, 'wireframe');
 
 // color
 // cubeTweak.addColor(material, 'color')
@@ -359,19 +483,19 @@ geometryTweak3.add(materialCube3, 'wireframe');
 // });
 
 geometryTweak1
-  .addColor(materialCube1, 'color')
+  .addColor(materialGeometry1, 'color')
   .onChange(() => {
     material.color.set(debugObject1.color);
   });
 
 geometryTweak2
-  .addColor(materialCube2, 'color')
+  .addColor(materialGeometry2, 'color')
   .onChange(() => {
     material.color.set(debugObject2.color);
   });
 
 geometryTweak3
-  .addColor(materialCube3, 'color')
+  .addColor(materialGeometry3, 'color')
   .onChange(() => {
     material.color.set(debugObject3.color);
   });
@@ -383,17 +507,17 @@ geometryTweak3
 // cubeTweak.add(debugObject, 'spin');
 
 debugObject1.spin = () => {
-  gsap.to(meshCube1.rotation, { y: meshCube1.rotation.y + Math.PI * 2 });
+  gsap.to(meshGeometry1.rotation, { y: meshGeometry1.rotation.y + Math.PI * 2 });
 };
 geometryTweak1.add(debugObject1, 'spin');
 
 debugObject2.spin = () => {
-  gsap.to(meshCube2.rotation, { y: meshCube2.rotation.y + Math.PI * 2 });
+  gsap.to(meshGeometry2.rotation, { y: meshGeometry2.rotation.y + Math.PI * 2 });
 };
 geometryTweak2.add(debugObject2, 'spin');
 
 debugObject3.spin = () => {
-  gsap.to(meshCube3.rotation, { y: meshCube3.rotation.y + Math.PI * 2 });
+  gsap.to(meshGeometry3.rotation, { y: meshGeometry3.rotation.y + Math.PI * 2 });
 };
 geometryTweak3.add(debugObject3, 'spin');
 
@@ -419,8 +543,8 @@ geometryTweak1
 .step(1)
 .onFinishChange(() => {
   // remove old geometry from the GPU memory
-  meshCube1.geometry.dispose();
-  meshCube1.geometry = new THREE.BoxGeometry(
+  meshGeometry1.geometry.dispose();
+  meshGeometry1.geometry = new THREE.BoxGeometry(
     debugObject1.width,
     debugObject1.height,
     debugObject1.depth,
@@ -437,8 +561,8 @@ geometryTweak1
 .step(1)
 .onFinishChange(() => {
   // remove old geometry from the GPU memory
-  meshCube1.geometry.dispose();
-  meshCube1.geometry = new THREE.BoxGeometry(
+  meshGeometry1.geometry.dispose();
+  meshGeometry1.geometry = new THREE.BoxGeometry(
     debugObject1.width,
     debugObject1.height,
     debugObject1.depth,
@@ -455,8 +579,8 @@ geometryTweak1
 .step(1)
 .onFinishChange(() => {
   // remove old geometry from the GPU memory
-  meshCube1.geometry.dispose();
-  meshCube1.geometry = new THREE.BoxGeometry(
+  meshGeometry1.geometry.dispose();
+  meshGeometry1.geometry = new THREE.BoxGeometry(
     debugObject1.width,
     debugObject1.height,
     debugObject1.depth,
@@ -473,8 +597,8 @@ geometryTweak1
   .step(1)
   .onFinishChange(() => {
     // remove old geometry from the GPU memory
-    meshCube1.geometry.dispose();
-    meshCube1.geometry = new THREE.BoxGeometry(
+    meshGeometry1.geometry.dispose();
+    meshGeometry1.geometry = new THREE.BoxGeometry(
       debugObject1.width,
     debugObject1.height,
     debugObject1.depth,
@@ -491,8 +615,8 @@ geometryTweak1
   .step(1)
   .onFinishChange(() => {
     // remove old geometry from the GPU memory
-    meshCube2.geometry.dispose();
-    meshCube2.geometry = new THREE.SphereGeometry(
+    meshGeometry2.geometry.dispose();
+    meshGeometry2.geometry = new THREE.SphereGeometry(
       debugObject2.radius,
       debugObject2.subdivision,
       debugObject2.subdivision / 2
@@ -506,8 +630,8 @@ geometryTweak2
   .step(1)
   .onFinishChange(() => {
     // remove old geometry from the GPU memory
-    meshCube2.geometry.dispose();
-    meshCube2.geometry = new THREE.SphereGeometry(
+    meshGeometry2.geometry.dispose();
+    meshGeometry2.geometry = new THREE.SphereGeometry(
       1,
       debugObject2.subdivision,
       debugObject2.subdivision / 2
@@ -521,8 +645,8 @@ geometryTweak3
   .step(1)
   .onFinishChange(() => {
     // remove old geometry from the GPU memory
-    meshCube3.geometry.dispose();
-    meshCube3.geometry = new THREE.CylinderGeometry(
+    meshGeometry3.geometry.dispose();
+    meshGeometry3.geometry = new THREE.CylinderGeometry(
       debugObject3.radiusTop,
       debugObject3.radiusBottom,
       debugObject3.height,
@@ -537,8 +661,8 @@ geometryTweak3
   .step(1)
   .onFinishChange(() => {
     // remove old geometry from the GPU memory
-    meshCube3.geometry.dispose();
-    meshCube3.geometry = new THREE.CylinderGeometry(
+    meshGeometry3.geometry.dispose();
+    meshGeometry3.geometry = new THREE.CylinderGeometry(
       debugObject3.radiusTop,
       debugObject3.radiusBottom,
       debugObject3.height,
@@ -553,8 +677,8 @@ geometryTweak3
   .step(1)
   .onFinishChange(() => {
     // remove old geometry from the GPU memory
-    meshCube3.geometry.dispose();
-    meshCube3.geometry = new THREE.CylinderGeometry(
+    meshGeometry3.geometry.dispose();
+    meshGeometry3.geometry = new THREE.CylinderGeometry(
       debugObject3.radiusTop,
       debugObject3.radiusBottom,
       debugObject3.height,
@@ -569,8 +693,8 @@ geometryTweak3
   .step(1)
   .onFinishChange(() => {
     // remove old geometry from the GPU memory
-    meshCube3.geometry.dispose();
-    meshCube3.geometry = new THREE.CylinderGeometry(
+    meshGeometry3.geometry.dispose();
+    meshGeometry3.geometry = new THREE.CylinderGeometry(
       debugObject3.radiusTop,
       debugObject3.radiusBottom,
       debugObject3.height,
@@ -636,33 +760,6 @@ geometryTweak3
 
 // const mesh = new THREE.Mesh(geometry, material);
 // scene.add(mesh);
-
-/**
- * Camera
- */
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
-// const aspectRatio = sizes.width / sizes.height;
-// const camera = new THREE.OrthographicCamera( -1,
-//   1 * aspectRatio,
-//   1 * aspectRatio,
-//   -1,
-//   0.1,
-//   100
-// );
-// camera.position.x = 2;
-// camera.position.y = 2;
-camera.position.z = 4;
-// camera.lookAt(group.position);
-// console.log(mesh.position.distanceTo(camera.position));
-scene.add(camera);
-
-/** 
- * Orbit controls
- */
-const controls = new OrbitControls(camera, canvas);
-controls.enableDamping = true;
-// controls.target.y = 1;
-// controls.update();
 
 /**
  * Renderer
