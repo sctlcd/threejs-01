@@ -185,31 +185,31 @@ loadingManager.onError = () => {
 };
 const textureLoader = new THREE.TextureLoader(loadingManager);
 
-const pathImage1 = '/textures/door/color-min.jpg'; // '/textures/minecraft.png';
+const pathImage1 = '/textures/minecraft.png'; // '/textures/door/color-min.jpg';
 const colorTexture1 = textureLoader.load(pathImage1);
 colorTexture1.colorSpace = THREE.SRGBColorSpace;
 
 // Transforming the texture
-colorTexture1.repeat.x = 2;
-colorTexture1.repeat.y = 3;
+// colorTexture1.repeat.x = 2;
+// colorTexture1.repeat.y = 3;
 // colorTexture1.wrapS = THREE.RepeatWrapping;
 // colorTexture1.wrapT = THREE.RepeatWrapping;
-colorTexture1.wrapS = THREE.MirroredRepeatWrapping;
-colorTexture1.wrapT = THREE.MirroredRepeatWrapping;
+// colorTexture1.wrapS = THREE.MirroredRepeatWrapping;
+// colorTexture1.wrapT = THREE.MirroredRepeatWrapping;
 
-colorTexture1.offset.x = 0.5;
-colorTexture1.offset.y = 0.5;
+// colorTexture1.offset.x = 0.5;
+// colorTexture1.offset.y = 0.5;
 
-colorTexture1.rotation = Math.PI * 0.25;
-colorTexture1.center.x = 0.5;
-colorTexture1.center.y = 0.5;
+// colorTexture1.rotation = Math.PI * 0.25;
+// colorTexture1.center.x = 0.5;
+// colorTexture1.center.y = 0.5;
 
 // Minification filter
 // colorTexture1.generateMipmaps = false; // deactivate the mipmaps generation when used with NearestFilter on minFilter 
 // colorTexture1.minFilter = THREE.NearestFilter;
 
 // Magnification Filter
-// colorTexture1.magFilter = THREE.NearestFilter;
+colorTexture1.magFilter = THREE.NearestFilter;
 
 const pathImage2 = '/textures/space-blanket-folds/space-bbanket-folds-min.jpg';
 const colorTexture2 = textureLoader.load(pathImage2);
