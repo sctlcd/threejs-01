@@ -139,55 +139,55 @@ window.addEventListener('mousemove', (event) => {
 // image.src = '/textures/door/color.jpg';
 
 // using eventTarget: addEventListener() method
-const image1 = new Image();
-const colorTexture1 = new THREE.Texture(image1);
-colorTexture1.colorSpace = THREE.SRGBColorSpace;
+// const image1 = new Image();
+// const colorTexture1 = new THREE.Texture(image1);
+// colorTexture1.colorSpace = THREE.SRGBColorSpace;
 
-image1.addEventListener('load', () => {
- colorTexture1.needsUpdate = true;
-});
+// image1.addEventListener('load', () => {
+//  colorTexture1.needsUpdate = true;
+// });
 
-image1.src = '/textures/door/color-min.jpg';
+// image1.src = '/textures/door/color-min.jpg';
 
-const image2 = new Image();
-const colorTexture2 = new THREE.Texture(image2);
-colorTexture2.colorSpace = THREE.SRGBColorSpace;
+// const image2 = new Image();
+// const colorTexture2 = new THREE.Texture(image2);
+// colorTexture2.colorSpace = THREE.SRGBColorSpace;
 
-image2.addEventListener('load', () => {
- colorTexture2.needsUpdate = true;
-});
+// image2.addEventListener('load', () => {
+//  colorTexture2.needsUpdate = true;
+// });
 
-image2.src = '/textures/space-blanket-folds/space-bbanket-folds-min.jpg';
+// image2.src = '/textures/space-blanket-folds/space-bbanket-folds-min.jpg';
 
-const image3 = new Image();
-const colorTexture3 = new THREE.Texture(image3);
-colorTexture3.colorSpace = THREE.SRGBColorSpace;
+// const image3 = new Image();
+// const colorTexture3 = new THREE.Texture(image3);
+// colorTexture3.colorSpace = THREE.SRGBColorSpace;
 
-image3.addEventListener('load', () => {
- colorTexture3.needsUpdate = true;
-});
+// image3.addEventListener('load', () => {
+//  colorTexture3.needsUpdate = true;
+// });
 
-image3.src = '/textures/rock/rock-cliff-volcanic-min.jpg';
+// image3.src = '/textures/rock/rock-cliff-volcanic-min.jpg';
 
 // using texture loader and loadingManager
-// const loadingManager = new THREE.LoadingManager();
-// loadingManager.onStart = () => { 
-//   console.log('onStart');
-// };
-// loadingManager.onLoaded = () => { 
-//   console.log('onLoaded');
-// };
-// loadingManager.onProgress = () => { 
-//   console.log('onProgress');
-// };
-// loadingManager.onError = () => { 
-//   console.log('onError');
-// };
-// const textureLoader = new THREE.TextureLoader(loadingManager);
+const loadingManager = new THREE.LoadingManager();
+loadingManager.onStart = () => { 
+  console.log('onStart');
+};
+loadingManager.onLoaded = () => { 
+  console.log('onLoaded');
+};
+loadingManager.onProgress = () => { 
+  console.log('onProgress');
+};
+loadingManager.onError = () => { 
+  console.log('onError');
+};
+const textureLoader = new THREE.TextureLoader(loadingManager);
 
-// const pathImage1 = '/textures/minecraft.png'; // '/textures/door/color-min.jpg';
-// const colorTexture1 = textureLoader.load(pathImage1);
-// colorTexture1.colorSpace = THREE.SRGBColorSpace;
+const pathImage1 = '/textures/door/color-min.jpg'; // '/textures/minecraft.png';
+const colorTexture1 = textureLoader.load(pathImage1);
+colorTexture1.colorSpace = THREE.SRGBColorSpace;
 
 // Transforming the texture
 // colorTexture1.repeat.x = 2;
@@ -211,13 +211,13 @@ image3.src = '/textures/rock/rock-cliff-volcanic-min.jpg';
 // Magnification Filter
 // colorTexture1.magFilter = THREE.NearestFilter;
 
-// const pathImage2 = '/textures/space-blanket-folds/space-bbanket-folds-min.jpg';
-// const colorTexture2 = textureLoader.load(pathImage2);
-// colorTexture2.colorSpace = THREE.SRGBColorSpace;
+const pathImage2 = '/textures/space-blanket-folds/space-bbanket-folds-min.jpg';
+const colorTexture2 = textureLoader.load(pathImage2);
+colorTexture2.colorSpace = THREE.SRGBColorSpace;
 
-// const pathImage3 = '/textures/rock/rock-cliff-volcanic-min.jpg';
-// const colorTexture3 = textureLoader.load(pathImage3);
-// colorTexture3.colorSpace = THREE.SRGBColorSpace;
+const pathImage3 = '/textures/rock/rock-cliff-volcanic-min.jpg';
+const colorTexture3 = textureLoader.load(pathImage3);
+colorTexture3.colorSpace = THREE.SRGBColorSpace;
 
 /**
  * Objects
