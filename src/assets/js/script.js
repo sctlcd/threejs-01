@@ -185,7 +185,7 @@ loadingManager.onError = () => {
 };
 const textureLoader = new THREE.TextureLoader(loadingManager);
 
-const pathImage1 = '/textures/minecraft.png'; // '/textures/door/color-min.jpg';
+const pathImage1 = '/textures/door/color-min.jpg'; // '/textures/minecraft.png';
 const colorTexture1 = textureLoader.load(pathImage1);
 colorTexture1.colorSpace = THREE.SRGBColorSpace;
 
@@ -286,6 +286,8 @@ const materialGeometry1 = new THREE.MeshBasicMaterial({
   // wireframe: true
   map: colorTexture1,
 });
+
+const material = new THREE.MeshBasicMaterial();
 
 const meshGeometry1 = new THREE.Mesh(
   geometry1,
@@ -800,11 +802,20 @@ const tick = () => {
   // camera.position.x = Math.cos(elapsedTime);
   // camera.lookAt(group.position);
 
+
   // GSAP libray: GreenSock
   // gsap.to(group.position, { duration: 1, delay: 1, x:2 });
   // gsap.to(group.position, { duration: 1, delay: 3, x:0 });
 
   // group.rotation.y = elapsedTime;
+
+  group.children[0].rotation.y = 0.1 * elapsedTime;
+  group.children[1].rotation.y = 0.1 * elapsedTime;
+  group.children[2].rotation.y = 0.1 * elapsedTime;
+
+  group.children[0].rotation.x = -0.15 * elapsedTime;
+  group.children[1].rotation.y = -0.15 * elapsedTime;
+  group.children[2].rotation.y = -0.15 * elapsedTime;
 
   // Update camera
   // camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 3;
