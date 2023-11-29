@@ -147,7 +147,7 @@ window.addEventListener('mousemove', (event) => {
 //  colorTexture1.needsUpdate = true;
 // });
 
-// image1.src = '/textures/door/color-min.jpg';
+// image1.src = '/textures/door/color.jpg';
 
 // const image2 = new Image();
 // const colorTexture2 = new THREE.Texture(image2);
@@ -185,7 +185,20 @@ loadingManager.onError = () => {
 };
 const textureLoader = new THREE.TextureLoader(loadingManager);
 
-const pathImage1 = '/textures/door/color-min.jpg'; // '/textures/minecraft.png';
+const doorColorTexture = textureLoader.load('./textures/door/color.jpg');
+const doorAlphaTexture = textureLoader.load('./textures/door/alpha.jpg');
+const doorAmbientOcclusionTexture = textureLoader.load('./textures/door/ambientOcclusion.jpg');
+const doorHeightTexture = textureLoader.load('./textures/door/height.jpg');
+const doorNormalTexture = textureLoader.load('./textures/door/normal.jpg');
+const doorMetalnessTexture = textureLoader.load('./textures/door/metalness.jpg');
+const doorRoughnessTexture = textureLoader.load('./textures/door/roughness.jpg');
+const matcapTexture = textureLoader.load('./textures/matcaps/1.png');
+const gradientTexture = textureLoader.load('./textures/gradients/3.jpg');
+
+doorColorTexture.colorSpace = THREE.SRGBColorSpace;
+matcapTexture.colorSpace = THREE.SRGBColorSpace;
+
+const pathImage1 = '/textures/door/color.jpg'; // '/textures/minecraft.png';
 const colorTexture1 = textureLoader.load(pathImage1);
 colorTexture1.colorSpace = THREE.SRGBColorSpace;
 
@@ -281,13 +294,14 @@ const geometry1 = new THREE.BoxGeometry(
   debugObject1.subdivision, // depthSegments
 );
 
-const materialGeometry1 = new THREE.MeshBasicMaterial({ 
+let materialGeometry1 = new THREE.MeshBasicMaterial({ 
   // color: debugObject1.color,
   // wireframe: true
   map: colorTexture1,
 });
 
-const material = new THREE.MeshBasicMaterial();
+const material = new THREE.MeshBasicMaterial({ map: doorColorTexture });
+materialGeometry1 = material;
 
 const meshGeometry1 = new THREE.Mesh(
   geometry1,
@@ -309,11 +323,13 @@ const geometry2 = new THREE.SphereGeometry(
   debugObject2.subdivision / 2, // heightSegments 
 );
 
-const materialGeometry2 = new THREE.MeshBasicMaterial({
+let materialGeometry2 = new THREE.MeshBasicMaterial({
   // color: debugObject2.color,
   // wireframe: true,
   map: colorTexture2,
 });
+
+materialGeometry2 = material;
 
 const meshGeometry2 = new THREE.Mesh(
   geometry2,
@@ -337,11 +353,13 @@ const geometry3 = new THREE.CylinderGeometry(
   debugObject3.radialSegments, // radialSegments
 );
 
-const materialGeometry3 = new THREE.MeshBasicMaterial({
+let materialGeometry3 = new THREE.MeshBasicMaterial({
   // color: debugObject3.color,
   // wireframe: true
   map: colorTexture3,
 });
+
+materialGeometry3 = material;
 
 const meshGeometry3 = new THREE.Mesh(
   geometry3,
