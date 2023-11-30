@@ -192,7 +192,7 @@ const doorHeightTexture = textureLoader.load('./textures/door/height.jpg');
 const doorNormalTexture = textureLoader.load('./textures/door/normal.jpg');
 const doorMetalnessTexture = textureLoader.load('./textures/door/metalness.jpg');
 const doorRoughnessTexture = textureLoader.load('./textures/door/roughness.jpg');
-const matcapTexture = textureLoader.load('./textures/matcaps/1.png');
+const matcapTexture = textureLoader.load('./textures/matcaps/8.png');
 const gradientTexture = textureLoader.load('./textures/gradients/3.jpg');
 
 doorColorTexture.colorSpace = THREE.SRGBColorSpace;
@@ -312,14 +312,17 @@ let materialGeometry1 = new THREE.MeshBasicMaterial({
 // material.side = THREE.DoubleSide;
 
 // MeshNormalMaterial
-const material = new THREE.MeshNormalMaterial();
-material.flatShading = true;
+// const material = new THREE.MeshNormalMaterial();
+// material.flatShading = true;
 
-materialGeometry1 = material;
+// MeshMatcapMaterial
+const material = new THREE.MeshMatcapMaterial();
+material.matcap = matcapTexture;
 
 const meshGeometry1 = new THREE.Mesh(
   geometry1,
-  materialGeometry1,
+  // materialGeometry1,
+  material
 );
 
 meshGeometry1.position.x = - 3;
@@ -343,11 +346,10 @@ let materialGeometry2 = new THREE.MeshBasicMaterial({
   map: colorTexture2,
 });
 
-materialGeometry2 = material;
-
 const meshGeometry2 = new THREE.Mesh(
   geometry2,
-  materialGeometry2,
+  // materialGeometry2,
+  material
 );
 
 meshGeometry2.position.x = 0;
@@ -373,11 +375,10 @@ let materialGeometry3 = new THREE.MeshBasicMaterial({
   map: colorTexture3,
 });
 
-materialGeometry3 = material;
-
 const meshGeometry3 = new THREE.Mesh(
   geometry3,
-  materialGeometry3
+  // materialGeometry3
+  material
 );
 
 meshGeometry3.position.x = 4;
@@ -506,9 +507,9 @@ geometryTweak3.add(group.children[2], 'visible');
 
 // wireframe
 // cubeTweak.add(material, 'wireframe');
-geometryTweak1.add(materialGeometry1, 'wireframe');
-geometryTweak2.add(materialGeometry2, 'wireframe');
-geometryTweak3.add(materialGeometry3, 'wireframe');
+// geometryTweak1.add(materialGeometry1, 'wireframe');
+// geometryTweak2.add(materialGeometry2, 'wireframe');
+// geometryTweak3.add(materialGeometry3, 'wireframe');
 
 // color
 // cubeTweak.addColor(material, 'color')
@@ -841,13 +842,13 @@ const tick = () => {
 
   // group.rotation.y = elapsedTime;
 
-  group.children[0].rotation.y = 0.1 * elapsedTime;
-  group.children[1].rotation.y = 0.1 * elapsedTime;
-  group.children[2].rotation.y = 0.1 * elapsedTime;
+  group.children[0].rotation.y = 0.5 * elapsedTime;
+  group.children[1].rotation.y = 0.5 * elapsedTime;
+  group.children[2].rotation.y = 0.5 * elapsedTime;
 
-  group.children[0].rotation.x = -0.15 * elapsedTime;
-  group.children[1].rotation.y = -0.15 * elapsedTime;
-  group.children[2].rotation.y = -0.15 * elapsedTime;
+  group.children[0].rotation.x = -0.5 * elapsedTime;
+  group.children[1].rotation.x = -0.5 * elapsedTime;
+  group.children[2].rotation.x = -0.5 * elapsedTime;
 
   // Update camera
   // camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 3;
