@@ -312,6 +312,9 @@ let materialGeometry1 = new THREE.MeshBasicMaterial({
   map: colorTexture1,
 });
 
+/**
+ * Materials
+ */
 // MeshBasicMaterial
 // const material = new THREE.MeshBasicMaterial({ map: doorColorTexture });
 // const material = new THREE.MeshBasicMaterial();
