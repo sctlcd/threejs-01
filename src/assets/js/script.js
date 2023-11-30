@@ -205,7 +205,7 @@ const doorNormalTexture = textureLoader.load('./textures/door/normal.jpg');
 const doorMetalnessTexture = textureLoader.load('./textures/door/metalness.jpg');
 const doorRoughnessTexture = textureLoader.load('./textures/door/roughness.jpg');
 const matcapTexture = textureLoader.load('./textures/matcaps/1.png');
-const gradientTexture = textureLoader.load('./textures/gradients/3.jpg');
+const gradientTexture = textureLoader.load('./textures/gradients/5.jpg');
 
 doorColorTexture.colorSpace = THREE.SRGBColorSpace;
 matcapTexture.colorSpace = THREE.SRGBColorSpace;
@@ -230,7 +230,7 @@ colorTexture1.colorSpace = THREE.SRGBColorSpace;
 // colorTexture1.center.y = 0.5;
 
 // Minification filter
-// colorTexture1.generateMipmaps = false; // deactivate the mipmaps generation when used with NearestFilter on minFilter 
+// colorTexture1.generateMipmaps = false; // deactivate the mipmaps generation when used with NearestFilter on minFilter -> better performances
 // colorTexture1.minFilter = THREE.NearestFilter;
 
 // Magnification Filter
@@ -338,9 +338,16 @@ let materialGeometry1 = new THREE.MeshBasicMaterial({
 // const material = new THREE.MeshLambertMaterial();
 
 // MeshPhongMaterial
-const material = new THREE.MeshPhongMaterial();
-material.shininess = 100;
-material.specular = new THREE.Color(0x1188ff);
+// const material = new THREE.MeshPhongMaterial();
+// material.shininess = 100;
+// material.specular = new THREE.Color(0x1188ff);
+
+// MeshToonMaterial
+const material = new THREE.MeshToonMaterial();
+gradientTexture.minFilter = THREE.NearestFilter;
+gradientTexture.magFilter = THREE.NearestFilter;
+gradientTexture.generateMipmaps = false; // deactivate the mipmaps generation when used with NearestFilter on minFilter -> better performances
+material.gradientMap = gradientTexture;
 
 const meshGeometry1 = new THREE.Mesh(
   geometry1,
