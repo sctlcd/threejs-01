@@ -300,15 +300,20 @@ let materialGeometry1 = new THREE.MeshBasicMaterial({
   map: colorTexture1,
 });
 
+// MeshBasicMaterial
 // const material = new THREE.MeshBasicMaterial({ map: doorColorTexture });
-const material = new THREE.MeshBasicMaterial();
-material.map = doorColorTexture;
+// const material = new THREE.MeshBasicMaterial();
+// material.map = doorColorTexture;
 // material.color = new THREE.Color('red');
 // material.wireframe = true;
 // material.transparent = true;
 // material.opacity = 0.5;
 // material.alphaMap = doorAlphaTexture;
-material.side = THREE.DoubleSide;
+// material.side = THREE.DoubleSide;
+
+// MeshNormalMaterial
+const material = new THREE.MeshNormalMaterial();
+material.flatShading = true;
 
 materialGeometry1 = material;
 
@@ -511,23 +516,23 @@ geometryTweak3.add(materialGeometry3, 'wireframe');
 //   material.color.set(debugObject.color);
 // });
 
-geometryTweak1
-  .addColor(materialGeometry1, 'color')
-  .onChange(() => {
-    material.color.set(debugObject1.color);
-  });
+// geometryTweak1
+//   .addColor(materialGeometry1, 'color')
+//   .onChange(() => {
+//     material.color.set(debugObject1.color);
+//   });
 
-geometryTweak2
-  .addColor(materialGeometry2, 'color')
-  .onChange(() => {
-    material.color.set(debugObject2.color);
-  });
+// geometryTweak2
+//   .addColor(materialGeometry2, 'color')
+//   .onChange(() => {
+//     material.color.set(debugObject2.color);
+//   });
 
-geometryTweak3
-  .addColor(materialGeometry3, 'color')
-  .onChange(() => {
-    material.color.set(debugObject3.color);
-  });
+// geometryTweak3
+//   .addColor(materialGeometry3, 'color')
+//   .onChange(() => {
+//     material.color.set(debugObject3.color);
+//   });
 
 // function/button
 // debugObject.spin = () => {
