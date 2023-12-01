@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 // import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import GUI from 'lil-gui';
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 
 /**
  * Debug UI - lil-gui documentation: https://lil-gui.georgealways.com/
@@ -82,14 +83,33 @@ scene.add(camera);
 /**
  * Light
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-scene.add(ambientLight);
+// const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+// scene.add(ambientLight);
 
-const pointLight = new THREE.PointLight(0xffffff, 30);
-pointLight.position.x = 2;
-pointLight.position.y = 3;
-pointLight.position.z = 4;
-scene.add(pointLight);
+// const pointLight = new THREE.PointLight(0xffffff, 30);
+// pointLight.position.x = 2;
+// pointLight.position.y = 3;
+// pointLight.position.z = 4;
+// scene.add(pointLight);
+
+/**
+ * Environment map
+ */
+const rgbeLoader = new RGBELoader();
+// Send a callback function as the second parameter
+rgbeLoader.load('./textures/environmentMap/2k.hdr', (environmentMap) => {
+  // Retrieve the environment mapas the parameter 
+  // Change environmentMap mapping property to THREE.EquirectangularReflectionMapping
+  // Example: https://threejs.org/examples/webgl_materials_envmaps.html
+  environmentMap.mapping = THREE.EquirectangularReflectionMapping;
+  
+  // Assign environmentMap to the background and environment properties of the scene
+  // Defines the background of the scene
+  scene.background = environmentMap;
+  // Sets the environment map for all physical materials in the scene
+  scene.environment = environmentMap;
+});
+
 
 /**
  * Sizes
@@ -306,12 +326,6 @@ const geometry1 = new THREE.BoxGeometry(
   debugObject1.subdivision, // depthSegments
 );
 
-let materialGeometry1 = new THREE.MeshBasicMaterial({ 
-  // color: debugObject1.color,
-  // wireframe: true
-  map: colorTexture1,
-});
-
 /**
  * Materials
  */
@@ -343,11 +357,34 @@ let materialGeometry1 = new THREE.MeshBasicMaterial({
 // material.specular = new THREE.Color(0x1188ff);
 
 // MeshToonMaterial
-const material = new THREE.MeshToonMaterial();
-gradientTexture.minFilter = THREE.NearestFilter;
-gradientTexture.magFilter = THREE.NearestFilter;
-gradientTexture.generateMipmaps = false; // deactivate the mipmaps generation when used with NearestFilter on minFilter -> better performances
-material.gradientMap = gradientTexture;
+// const material = new THREE.MeshToonMaterial();
+// gradientTexture.minFilter = THREE.NearestFilter;
+// gradientTexture.magFilter = THREE.NearestFilter;
+// gradientTexture.generateMipmaps = false; // deactivate the mipmaps generation when used with NearestFilter on minFilter -> better performances
+// material.gradientMap = gradientTexture;
+
+// MeshStandardMaterial
+const material = new THREE.MeshStandardMaterial();
+material .metalness = 0.7;
+material.roughness = 0.2;
+
+gui
+  .add(material, 'metalness')
+  .min(0)
+  .max(1)
+  .step(0.0001);
+
+gui
+  .add(material, 'roughness')
+  .min(0)
+  .max(1)
+  .step(0.0001);
+
+let materialGeometry1 = new THREE.MeshBasicMaterial({ 
+  // color: debugObject1.color,
+  // wireframe: true
+  map: colorTexture1,
+});
 
 const meshGeometry1 = new THREE.Mesh(
   geometry1,
