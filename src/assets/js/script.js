@@ -394,9 +394,14 @@ material.normalScale.set(0.5, 0.5);
 // material.clearcoatRoughness = 0;
 
 // Sheen
-material.sheen = 1;
-material.sheenRoughness = 0.25;
-material.sheenColor.set(1, 1, 1);
+// material.sheen = 1;
+// material.sheenRoughness = 0.25;
+// material.sheenColor.set(1, 1, 1);
+
+// Iridescence
+material.iridescence = 1;
+material.iridescenceIOR = 1;
+material.iridescenceThicknessRange = [100, 800];
 
 gui
   .add(material, 'metalness')
