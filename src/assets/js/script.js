@@ -390,8 +390,13 @@ material.normalScale.set(0.5, 0.5);
 // material.alphaMap = doorAlphaTexture;
 
 // Clearcoat
-material.clearcoat = 1;
-material.clearcoatRoughness = 0;
+// material.clearcoat = 1;
+// material.clearcoatRoughness = 0;
+
+// Sheen
+material.sheen = 1;
+material.sheenRoughness = 0.25;
+material.sheenColor.set(1, 1, 1);
 
 gui
   .add(material, 'metalness')
@@ -405,17 +410,56 @@ gui
   .max(1)
   .step(0.0001);
 
-  gui
+gui
   .add(material, 'clearcoat')
   .min(0)
   .max(1)
   .step(0.0001);
 
-  gui
+gui
   .add(material, 'clearcoatRoughness')
   .min(0)
   .max(1)
   .step(0.0001);
+
+gui
+  .add(material, 'sheen')
+  .min(0)
+  .max(1)
+  .step(0.0001);
+
+gui
+  .add(material, 'sheenRoughness')
+  .min(0)
+  .max(1)
+  .step(0.0001);
+
+gui
+  .addColor(material, 'sheenColor');
+
+gui
+  .add(material, 'iridescence')
+  .min(0)
+  .max(1)
+  .step(0.0001);
+
+gui
+  .add(material, 'iridescenceIOR')
+  .min(1)
+  .max(2.333)
+  .step(0.0001);
+  
+gui
+  .add(material.iridescenceThicknessRange, '0')
+  .min(1)
+  .max(1000)
+  .step(1);
+
+gui
+  .add(material.iridescenceThicknessRange, '1')
+  .min(1)
+  .max(1000)
+  .step(1);
 
 let materialGeometry1 = new THREE.MeshBasicMaterial({ 
   // color: debugObject1.color,
