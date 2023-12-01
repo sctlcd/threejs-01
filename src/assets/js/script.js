@@ -378,14 +378,14 @@ const geometry1 = new THREE.BoxGeometry(
 
 // MeshPhysicalMaterial
 const material = new THREE.MeshPhysicalMaterial();
-material .metalness = 1; // 0.7;
-material.roughness = 1; // 0.2;
-material.map = doorColorTexture;
-material.aoMap = doorAmbientOcclusionTexture;
-material.aoMapIntensity = 1;
-material.displacementMap = doorHeightTexture;
-material.displacementScale = 0.1;
-material.normalScale.set(0.5, 0.5);
+material .metalness = 0; // 1; // 0.7;
+material.roughness = 0; // 1; // 0.2;
+// material.map = doorColorTexture;
+// material.aoMap = doorAmbientOcclusionTexture;
+// material.aoMapIntensity = 1;
+// material.displacementMap = doorHeightTexture;
+// material.displacementScale = 0.1;
+// material.normalScale.set(0.5, 0.5);
 // material.transparent = true;
 // material.alphaMap = doorAlphaTexture;
 
@@ -399,9 +399,14 @@ material.normalScale.set(0.5, 0.5);
 // material.sheenColor.set(1, 1, 1);
 
 // Iridescence
-material.iridescence = 1;
-material.iridescenceIOR = 1;
-material.iridescenceThicknessRange = [100, 800];
+// material.iridescence = 1;
+// material.iridescenceIOR = 1;
+// material.iridescenceThicknessRange = [100, 800];
+
+// Transmission
+material.transmission = 1;
+material.ior = 1.5;
+material.thickness= 0.5;
 
 gui
   .add(material, 'metalness')
@@ -465,6 +470,24 @@ gui
   .min(1)
   .max(1000)
   .step(1);
+
+gui
+  .add(material, 'transmission')
+  .min(0)
+  .max(1)
+  .step(0.0001);
+
+gui
+  .add(material, 'ior')
+  .min(1)
+  .max(10)
+  .step(0.0001);
+
+gui
+  .add(material, 'thickness')
+  .min(0)
+  .max(1)
+  .step(0.0001);
 
 let materialGeometry1 = new THREE.MeshBasicMaterial({ 
   // color: debugObject1.color,
