@@ -312,7 +312,7 @@ group.rotation.y = 0;
 scene.add(group);
 
 debugObject1.color = '#d6cc38';
-debugObject1.subdivision = 6;
+debugObject1.subdivision = 100;
 debugObject1.width = 1;
 debugObject1.height = 1;
 debugObject1.depth = 1;
@@ -365,8 +365,16 @@ const geometry1 = new THREE.BoxGeometry(
 
 // MeshStandardMaterial
 const material = new THREE.MeshStandardMaterial();
-material .metalness = 0.7;
-material.roughness = 0.2;
+material .metalness = 1; // 0.7;
+material.roughness = 1; // 0.2;
+material.map = doorColorTexture;
+material.aoMap = doorAmbientOcclusionTexture;
+material.aoMapIntensity = 1;
+material.displacementMap = doorHeightTexture;
+material.displacementScale = 0.1;
+material.normalScale.set(0.5, 0.5);
+// material.transparent = true;
+// material.alphaMap = doorAlphaTexture;
 
 gui
   .add(material, 'metalness')
@@ -398,7 +406,7 @@ meshGeometry1.scale.y = 1.5;
 group.add(meshGeometry1);
 
 debugObject2.color = '#FF0000';
-debugObject2.subdivision = 32;
+debugObject2.subdivision = 128;
 debugObject2.radius = 1;
 
 const geometry2 = new THREE.SphereGeometry(
