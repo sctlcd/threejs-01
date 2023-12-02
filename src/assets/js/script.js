@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 // import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import GUI from 'lil-gui';
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 
 /**
  * Debug UI - lil-gui documentation: https://lil-gui.georgealways.com/
@@ -80,6 +81,37 @@ camera.position.z = 4;
 scene.add(camera);
 
 /**
+ * Light
+ */
+// const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+// scene.add(ambientLight);
+
+// const pointLight = new THREE.PointLight(0xffffff, 30);
+// pointLight.position.x = 2;
+// pointLight.position.y = 3;
+// pointLight.position.z = 4;
+// scene.add(pointLight);
+
+/**
+ * Environment map
+ */
+const rgbeLoader = new RGBELoader();
+// Send a callback function as the second parameter
+rgbeLoader.load('./textures/environmentMap/2k.hdr', (environmentMap) => {
+  // Retrieve the environment mapas the parameter 
+  // Change environmentMap mapping property to THREE.EquirectangularReflectionMapping
+  // Example: https://threejs.org/examples/webgl_materials_envmaps.html
+  environmentMap.mapping = THREE.EquirectangularReflectionMapping;
+  
+  // Assign environmentMap to the background and environment properties of the scene
+  // Defines the background of the scene
+  scene.background = environmentMap;
+  // Sets the environment map for all physical materials in the scene
+  scene.environment = environmentMap;
+});
+
+
+/**
  * Sizes
  */
 // resize listener
@@ -147,7 +179,7 @@ window.addEventListener('mousemove', (event) => {
 //  colorTexture1.needsUpdate = true;
 // });
 
-// image1.src = '/textures/door/color-min.jpg';
+// image1.src = '/textures/door/color.jpg';
 
 // const image2 = new Image();
 // const colorTexture2 = new THREE.Texture(image2);
@@ -185,7 +217,20 @@ loadingManager.onError = () => {
 };
 const textureLoader = new THREE.TextureLoader(loadingManager);
 
-const pathImage1 = '/textures/minecraft.png'; // '/textures/door/color-min.jpg';
+const doorColorTexture = textureLoader.load('./textures/door/color.jpg');
+const doorAlphaTexture = textureLoader.load('./textures/door/alpha.jpg');
+const doorAmbientOcclusionTexture = textureLoader.load('./textures/door/ambientOcclusion.jpg');
+const doorHeightTexture = textureLoader.load('./textures/door/height.jpg');
+const doorNormalTexture = textureLoader.load('./textures/door/normal.jpg');
+const doorMetalnessTexture = textureLoader.load('./textures/door/metalness.jpg');
+const doorRoughnessTexture = textureLoader.load('./textures/door/roughness.jpg');
+const matcapTexture = textureLoader.load('./textures/matcaps/1.png');
+const gradientTexture = textureLoader.load('./textures/gradients/5.jpg');
+
+doorColorTexture.colorSpace = THREE.SRGBColorSpace;
+matcapTexture.colorSpace = THREE.SRGBColorSpace;
+
+const pathImage1 = '/textures/door/color.jpg'; // '/textures/minecraft.png';
 const colorTexture1 = textureLoader.load(pathImage1);
 colorTexture1.colorSpace = THREE.SRGBColorSpace;
 
@@ -205,7 +250,7 @@ colorTexture1.colorSpace = THREE.SRGBColorSpace;
 // colorTexture1.center.y = 0.5;
 
 // Minification filter
-// colorTexture1.generateMipmaps = false; // deactivate the mipmaps generation when used with NearestFilter on minFilter 
+// colorTexture1.generateMipmaps = false; // deactivate the mipmaps generation when used with NearestFilter on minFilter -> better performances
 // colorTexture1.minFilter = THREE.NearestFilter;
 
 // Magnification Filter
@@ -267,7 +312,7 @@ group.rotation.y = 0;
 scene.add(group);
 
 debugObject1.color = '#d6cc38';
-debugObject1.subdivision = 6;
+debugObject1.subdivision = 100;
 debugObject1.width = 1;
 debugObject1.height = 1;
 debugObject1.depth = 1;
@@ -281,7 +326,170 @@ const geometry1 = new THREE.BoxGeometry(
   debugObject1.subdivision, // depthSegments
 );
 
-const materialGeometry1 = new THREE.MeshBasicMaterial({ 
+/**
+ * Materials
+ */
+// MeshBasicMaterial
+// const material = new THREE.MeshBasicMaterial({ map: doorColorTexture });
+// const material = new THREE.MeshBasicMaterial();
+// material.map = doorColorTexture;
+// material.color = new THREE.Color('red');
+// material.wireframe = true;
+// material.transparent = true;
+// material.opacity = 0.5;
+// material.alphaMap = doorAlphaTexture;
+// material.side = THREE.DoubleSide;
+
+// MeshNormalMaterial
+// const material = new THREE.MeshNormalMaterial();
+// material.flatShading = true;
+
+// MeshMatcapMaterial
+// const material = new THREE.MeshMatcapMaterial();
+// material.matcap = matcapTexture;
+
+// MeshLambertMaterial
+// const material = new THREE.MeshLambertMaterial();
+
+// MeshPhongMaterial
+// const material = new THREE.MeshPhongMaterial();
+// material.shininess = 100;
+// material.specular = new THREE.Color(0x1188ff);
+
+// MeshToonMaterial
+// const material = new THREE.MeshToonMaterial();
+// gradientTexture.minFilter = THREE.NearestFilter;
+// gradientTexture.magFilter = THREE.NearestFilter;
+// gradientTexture.generateMipmaps = false; // deactivate the mipmaps generation when used with NearestFilter on minFilter -> better performances
+// material.gradientMap = gradientTexture;
+
+// MeshStandardMaterial
+// const material = new THREE.MeshStandardMaterial();
+// material .metalness = 1; // 0.7;
+// material.roughness = 1; // 0.2;
+// material.map = doorColorTexture;
+// material.aoMap = doorAmbientOcclusionTexture;
+// material.aoMapIntensity = 1;
+// material.displacementMap = doorHeightTexture;
+// material.displacementScale = 0.1;
+// material.normalScale.set(0.5, 0.5);
+// material.transparent = true;
+// material.alphaMap = doorAlphaTexture;
+
+// MeshPhysicalMaterial
+const material = new THREE.MeshPhysicalMaterial();
+material .metalness = 0; // 1; // 0.7;
+material.roughness = 0; // 1; // 0.2;
+// material.map = doorColorTexture;
+// material.aoMap = doorAmbientOcclusionTexture;
+// material.aoMapIntensity = 1;
+// material.displacementMap = doorHeightTexture;
+// material.displacementScale = 0.1;
+// material.normalScale.set(0.5, 0.5);
+// material.transparent = true;
+// material.alphaMap = doorAlphaTexture;
+
+// Clearcoat
+// material.clearcoat = 1;
+// material.clearcoatRoughness = 0;
+
+// Sheen
+// material.sheen = 1;
+// material.sheenRoughness = 0.25;
+// material.sheenColor.set(1, 1, 1);
+
+// Iridescence
+// material.iridescence = 1;
+// material.iridescenceIOR = 1;
+// material.iridescenceThicknessRange = [100, 800];
+
+// Transmission
+material.transmission = 1;
+material.ior = 1.5;
+material.thickness= 0.5;
+
+gui
+  .add(material, 'metalness')
+  .min(0)
+  .max(1)
+  .step(0.0001);
+
+gui
+  .add(material, 'roughness')
+  .min(0)
+  .max(1)
+  .step(0.0001);
+
+gui
+  .add(material, 'clearcoat')
+  .min(0)
+  .max(1)
+  .step(0.0001);
+
+gui
+  .add(material, 'clearcoatRoughness')
+  .min(0)
+  .max(1)
+  .step(0.0001);
+
+gui
+  .add(material, 'sheen')
+  .min(0)
+  .max(1)
+  .step(0.0001);
+
+gui
+  .add(material, 'sheenRoughness')
+  .min(0)
+  .max(1)
+  .step(0.0001);
+
+gui
+  .addColor(material, 'sheenColor');
+
+gui
+  .add(material, 'iridescence')
+  .min(0)
+  .max(1)
+  .step(0.0001);
+
+gui
+  .add(material, 'iridescenceIOR')
+  .min(1)
+  .max(2.333)
+  .step(0.0001);
+  
+gui
+  .add(material.iridescenceThicknessRange, '0')
+  .min(1)
+  .max(1000)
+  .step(1);
+
+gui
+  .add(material.iridescenceThicknessRange, '1')
+  .min(1)
+  .max(1000)
+  .step(1);
+
+gui
+  .add(material, 'transmission')
+  .min(0)
+  .max(1)
+  .step(0.0001);
+
+gui
+  .add(material, 'ior')
+  .min(1)
+  .max(10)
+  .step(0.0001);
+
+gui
+  .add(material, 'thickness')
+  .min(0)
+  .max(1)
+  .step(0.0001);
+
+let materialGeometry1 = new THREE.MeshBasicMaterial({ 
   // color: debugObject1.color,
   // wireframe: true
   map: colorTexture1,
@@ -289,7 +497,8 @@ const materialGeometry1 = new THREE.MeshBasicMaterial({
 
 const meshGeometry1 = new THREE.Mesh(
   geometry1,
-  materialGeometry1,
+  // materialGeometry1,
+  material
 );
 
 meshGeometry1.position.x = - 3;
@@ -298,7 +507,7 @@ meshGeometry1.scale.y = 1.5;
 group.add(meshGeometry1);
 
 debugObject2.color = '#FF0000';
-debugObject2.subdivision = 32;
+debugObject2.subdivision = 128;
 debugObject2.radius = 1;
 
 const geometry2 = new THREE.SphereGeometry(
@@ -307,7 +516,7 @@ const geometry2 = new THREE.SphereGeometry(
   debugObject2.subdivision / 2, // heightSegments 
 );
 
-const materialGeometry2 = new THREE.MeshBasicMaterial({
+let materialGeometry2 = new THREE.MeshBasicMaterial({
   // color: debugObject2.color,
   // wireframe: true,
   map: colorTexture2,
@@ -315,7 +524,8 @@ const materialGeometry2 = new THREE.MeshBasicMaterial({
 
 const meshGeometry2 = new THREE.Mesh(
   geometry2,
-  materialGeometry2,
+  // materialGeometry2,
+  material
 );
 
 meshGeometry2.position.x = 0;
@@ -335,7 +545,7 @@ const geometry3 = new THREE.CylinderGeometry(
   debugObject3.radialSegments, // radialSegments
 );
 
-const materialGeometry3 = new THREE.MeshBasicMaterial({
+let materialGeometry3 = new THREE.MeshBasicMaterial({
   // color: debugObject3.color,
   // wireframe: true
   map: colorTexture3,
@@ -343,7 +553,8 @@ const materialGeometry3 = new THREE.MeshBasicMaterial({
 
 const meshGeometry3 = new THREE.Mesh(
   geometry3,
-  materialGeometry3
+  // materialGeometry3
+  material
 );
 
 meshGeometry3.position.x = 4;
@@ -472,9 +683,9 @@ geometryTweak3.add(group.children[2], 'visible');
 
 // wireframe
 // cubeTweak.add(material, 'wireframe');
-geometryTweak1.add(materialGeometry1, 'wireframe');
-geometryTweak2.add(materialGeometry2, 'wireframe');
-geometryTweak3.add(materialGeometry3, 'wireframe');
+// geometryTweak1.add(materialGeometry1, 'wireframe');
+// geometryTweak2.add(materialGeometry2, 'wireframe');
+// geometryTweak3.add(materialGeometry3, 'wireframe');
 
 // color
 // cubeTweak.addColor(material, 'color')
@@ -482,23 +693,23 @@ geometryTweak3.add(materialGeometry3, 'wireframe');
 //   material.color.set(debugObject.color);
 // });
 
-geometryTweak1
-  .addColor(materialGeometry1, 'color')
-  .onChange(() => {
-    material.color.set(debugObject1.color);
-  });
+// geometryTweak1
+//   .addColor(materialGeometry1, 'color')
+//   .onChange(() => {
+//     material.color.set(debugObject1.color);
+//   });
 
-geometryTweak2
-  .addColor(materialGeometry2, 'color')
-  .onChange(() => {
-    material.color.set(debugObject2.color);
-  });
+// geometryTweak2
+//   .addColor(materialGeometry2, 'color')
+//   .onChange(() => {
+//     material.color.set(debugObject2.color);
+//   });
 
-geometryTweak3
-  .addColor(materialGeometry3, 'color')
-  .onChange(() => {
-    material.color.set(debugObject3.color);
-  });
+// geometryTweak3
+//   .addColor(materialGeometry3, 'color')
+//   .onChange(() => {
+//     material.color.set(debugObject3.color);
+//   });
 
 // function/button
 // debugObject.spin = () => {
@@ -800,11 +1011,20 @@ const tick = () => {
   // camera.position.x = Math.cos(elapsedTime);
   // camera.lookAt(group.position);
 
+
   // GSAP libray: GreenSock
   // gsap.to(group.position, { duration: 1, delay: 1, x:2 });
   // gsap.to(group.position, { duration: 1, delay: 3, x:0 });
 
   // group.rotation.y = elapsedTime;
+
+  group.children[0].rotation.y = 0.5 * elapsedTime;
+  group.children[1].rotation.y = 0.5 * elapsedTime;
+  group.children[2].rotation.y = 0.5 * elapsedTime;
+
+  group.children[0].rotation.x = -0.5 * elapsedTime;
+  group.children[1].rotation.x = -0.5 * elapsedTime;
+  group.children[2].rotation.x = -0.5 * elapsedTime;
 
   // Update camera
   // camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 3;
